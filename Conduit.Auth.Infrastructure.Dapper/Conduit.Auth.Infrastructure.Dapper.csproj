@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj"/>
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure\Conduit.Auth.Infrastructure.csproj"/>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Dapper.FluentMap" Version="2.0.0"/>
+    <PackageReference Include="FluentMigrator.Runner" Version="3.3.1"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Npgsql" Version="6.0.0"/>
+    <PackageReference Include="SqlKata" Version="2.3.7"/>
+    <PackageReference Include="SqlKata.Execution" Version="2.3.7"/>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Conduit.Auth.ApplicationLayer\Conduit.Auth.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure.Dapper\Conduit.Auth.Infrastructure.Dapper.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure.JwtTokens\Conduit.Auth.Infrastructure.JwtTokens.csproj" />
+  </ItemGroup>
+
+</Project>
