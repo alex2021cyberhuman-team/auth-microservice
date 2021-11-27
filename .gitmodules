@@ -1,0 +1,4 @@
+[submodule "shared-core"]
+	path = shared-core
+	url = https://github.com/alex2021cyberhuman-team/shared-core.git
+	branch = develop

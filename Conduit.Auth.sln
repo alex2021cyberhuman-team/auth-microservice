@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Auth.Infrastructure
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Auth.WebApi", "Conduit.Auth.WebApi\Conduit.Auth.WebApi.csproj", "{3D1498E6-DCEE-4DA2-95AC-68CAA90C04CC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Shared", "..\shared-core\Conduit.Shared\Conduit.Shared.csproj", "{6D16BB5F-7623-44DA-BF53-2D7F83BD5797}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Conduit.Shared", ".\shared-core\Conduit.Shared\Conduit.Shared.csproj", "{6D16BB5F-7623-44DA-BF53-2D7F83BD5797}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
