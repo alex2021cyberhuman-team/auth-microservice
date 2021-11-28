@@ -11,6 +11,7 @@ using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
 using FluentValidation;
+using Conduit.Shared.Tokens;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
