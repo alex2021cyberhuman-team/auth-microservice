@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
 using Conduit.Auth.Domain.Users;
 

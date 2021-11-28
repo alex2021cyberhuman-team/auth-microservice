@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
+using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
 using Conduit.Auth.Domain.Users.Repositories;
 using Conduit.Auth.Domain.Users.Services;
 using FluentValidation;

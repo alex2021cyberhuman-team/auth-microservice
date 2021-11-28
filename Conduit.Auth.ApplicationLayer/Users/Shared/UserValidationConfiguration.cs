@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Shared

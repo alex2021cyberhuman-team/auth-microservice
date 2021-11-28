@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Infrastructure.Dapper.Connection;
+using Conduit.Auth.Infrastructure.Dapper.Connection;
 
 namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
 {

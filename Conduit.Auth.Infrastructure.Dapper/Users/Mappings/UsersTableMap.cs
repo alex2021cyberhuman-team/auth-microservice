@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Domain.Users;
+using Conduit.Auth.Domain.Users;
 using Dapper.FluentMap.Mapping;
 
 namespace Conduit.Auth.Infrastructure.Dapper.Users.Mappings

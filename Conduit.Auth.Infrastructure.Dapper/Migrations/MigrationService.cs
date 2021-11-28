@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using FluentMigrator.Runner;
 
 namespace Conduit.Auth.Infrastructure.Dapper.Migrations

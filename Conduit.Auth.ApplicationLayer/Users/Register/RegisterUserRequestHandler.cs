@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
 using Conduit.Auth.Domain.Services;

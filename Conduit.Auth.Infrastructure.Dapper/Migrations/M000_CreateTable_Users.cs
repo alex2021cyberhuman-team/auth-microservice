@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Infrastructure.Dapper.Users.Mappings;
+using Conduit.Auth.Infrastructure.Dapper.Users.Mappings;
 using FluentMigrator;
 
 namespace Conduit.Auth.Infrastructure.Dapper.Migrations

@@ -1,4 +1,4 @@
-﻿namespace Conduit.Auth.Infrastructure.Dapper.Connection
+namespace Conduit.Auth.Infrastructure.Dapper.Connection
 {
     public class NpgsqlConnectionOptions
     {

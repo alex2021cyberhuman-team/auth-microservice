@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Repositories;

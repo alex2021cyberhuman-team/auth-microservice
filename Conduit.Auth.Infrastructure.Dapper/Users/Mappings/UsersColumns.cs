@@ -1,4 +1,4 @@
-﻿namespace Conduit.Auth.Infrastructure.Dapper.Users.Mappings
+namespace Conduit.Auth.Infrastructure.Dapper.Users.Mappings
 {
     public static class UsersColumns
     {

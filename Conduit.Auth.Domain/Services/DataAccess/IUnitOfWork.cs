@@ -1,4 +1,4 @@
-﻿namespace Conduit.Auth.Domain.Services.DataAccess
+namespace Conduit.Auth.Domain.Services.DataAccess
 {
     public interface IUnitOfWork
     {

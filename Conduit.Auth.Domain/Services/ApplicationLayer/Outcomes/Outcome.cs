@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+using FluentValidation.Results;
 
 namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
 {

@@ -37,6 +37,7 @@ services.AddSwaggerGen(
     });
 
 services.AddDapper(configuration.GetSection("Dapper").Bind)
+    .AddJwtIssuerServices()
     .AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind)
     .AddHttpClient()

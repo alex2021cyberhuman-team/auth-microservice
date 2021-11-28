@@ -1,4 +1,4 @@
-﻿namespace Conduit.Auth.Domain.Users.Passwords
+namespace Conduit.Auth.Domain.Users.Passwords
 {
     public interface IPasswordManager
     {

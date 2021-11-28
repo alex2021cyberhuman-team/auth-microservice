@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.ApplicationLayer.Users.Shared;
+using Conduit.Auth.ApplicationLayer.Users.Shared;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
 using Conduit.Auth.Domain.Services.DataAccess;
 using Conduit.Auth.Domain.Users.Repositories;

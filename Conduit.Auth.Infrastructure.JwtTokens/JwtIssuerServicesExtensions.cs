@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+using System.IdentityModel.Tokens.Jwt;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
 using Microsoft.Extensions.DependencyInjection;
 

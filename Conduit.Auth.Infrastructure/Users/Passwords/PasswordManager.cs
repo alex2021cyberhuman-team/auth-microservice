@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Security.Cryptography;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Passwords;

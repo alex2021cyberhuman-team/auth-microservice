@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Conduit.Auth.Domain.Services.DataAccess;
 using Microsoft.Extensions.DependencyInjection;
 

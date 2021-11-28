@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
 using Conduit.Auth.Domain.Users;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Shared
