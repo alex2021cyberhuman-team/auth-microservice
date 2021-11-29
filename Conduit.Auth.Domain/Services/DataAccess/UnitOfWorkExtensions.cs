@@ -6,8 +6,7 @@ namespace Conduit.Auth.Domain.Services.DataAccess
     public static class UnitOfWorkExtensions
     {
         private static MethodInfo _genericMethod =
-            typeof(IUnitOfWork).GetMethod(
-                nameof(IUnitOfWork.GetRepository),
+            typeof(IUnitOfWork).GetMethod(nameof(IUnitOfWork.GetRepository),
                 BindingFlags.Public | BindingFlags.Instance)!;
 
         public static object? GetRepository(
@@ -16,8 +15,7 @@ namespace Conduit.Auth.Domain.Services.DataAccess
         {
             if (!typeof(IRepository).IsAssignableFrom(repositoryType))
             {
-                throw new ArgumentException(
-                    "Invalid repositoryType",
+                throw new ArgumentException("Invalid repositoryType",
                     nameof(repositoryType));
             }
 
@@ -27,8 +25,7 @@ namespace Conduit.Auth.Domain.Services.DataAccess
         }
 
         public static TRepository GetRequiredRepository<TRepository>(
-            this IUnitOfWork unitOfWork)
-            where TRepository : IRepository
+            this IUnitOfWork unitOfWork) where TRepository : IRepository
         {
             return unitOfWork.GetRepository<TRepository>() ??
                    throw new ArgumentNullException(

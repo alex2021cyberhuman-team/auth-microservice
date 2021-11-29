@@ -14,8 +14,8 @@ namespace Conduit.Auth.WebApi.Controllers.Users
     [Route("users")]
     public class UsersController : SharedController
     {
-        public UsersController(IMediator mediator)
-            : base(mediator)
+        public UsersController(
+            IMediator mediator) : base(mediator)
         {
         }
 
@@ -27,8 +27,7 @@ namespace Conduit.Auth.WebApi.Controllers.Users
         {
             return await
                 Send<Outcome<UserResponse>, RegisterUserRequest, UserResponse>(
-                    request,
-                    cancellationToken: cancellationToken);
+                    request, cancellationToken: cancellationToken);
         }
 
         [HttpPost("login", Name = "loginUser")]
@@ -39,8 +38,7 @@ namespace Conduit.Auth.WebApi.Controllers.Users
         {
             return await
                 Send<Outcome<UserResponse>, LoginUserRequest, UserResponse>(
-                    request,
-                    cancellationToken: cancellationToken);
+                    request, cancellationToken: cancellationToken);
         }
     }
 }

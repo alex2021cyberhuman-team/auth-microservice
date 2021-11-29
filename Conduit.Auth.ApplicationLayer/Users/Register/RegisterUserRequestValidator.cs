@@ -6,8 +6,8 @@ using FluentValidation;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Register
 {
-    public class RegisterUserRequestValidator
-        : AbstractValidator<RegisterUserRequest>
+    public class
+        RegisterUserRequestValidator : AbstractValidator<RegisterUserRequest>
     {
         public RegisterUserRequestValidator(
             IImageChecker imageChecker,
@@ -15,15 +15,10 @@ namespace Conduit.Auth.ApplicationLayer.Users.Register
         {
             RuleFor(x => x.User)
                 .SetValidator(new RegisterUserModelValidator(imageChecker));
-            RuleFor(x => x.User.Email)
-                .UniqueEmail(
-                    unitOfWork
-                        .GetRequiredRepository<IUsersFindByEmailRepository>());
-            RuleFor(x => x.User.Username)
-                .UniqueUsername(
-                    unitOfWork
-                        .GetRequiredRepository<
-                            IUsersFindByUsernameRepository>());
+            RuleFor(x => x.User.Email).UniqueEmail(unitOfWork
+                .GetRequiredRepository<IUsersFindByEmailRepository>());
+            RuleFor(x => x.User.Username).UniqueUsername(unitOfWork
+                .GetRequiredRepository<IUsersFindByUsernameRepository>());
         }
     }
 }

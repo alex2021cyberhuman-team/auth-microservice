@@ -13,8 +13,7 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
             ICurrentUserProvider? currentUserProvider = null)
         {
             return ruleBuilder.SetAsyncValidator(
-                new UniqueEmailValidator<TModel>(
-                    findByEmailRepository,
+                new UniqueEmailValidator<TModel>(findByEmailRepository,
                     currentUserProvider));
         }
 
@@ -24,8 +23,7 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
             ICurrentUserProvider? currentUserProvider = null)
         {
             return ruleBuilder.SetAsyncValidator(
-                new UniqueUsernameValidator<TModel>(
-                    findByUsernameRepository,
+                new UniqueUsernameValidator<TModel>(findByUsernameRepository,
                     currentUserProvider));
         }
 
@@ -41,16 +39,14 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
         public static IRuleBuilder<TModel, string?> ValidUsername<TModel>(
             this IRuleBuilder<TModel, string?> ruleBuilder)
         {
-            return ruleBuilder.MinimumLength(8)
-                .MaximumLength(500)
+            return ruleBuilder.MinimumLength(8).MaximumLength(500)
                 .Matches(UserValidationConfiguration.AcceptedUsernameRegex);
         }
 
         public static IRuleBuilder<TModel, string?> ValidPassword<TModel>(
             this IRuleBuilder<TModel, string?> ruleBuilder)
         {
-            return ruleBuilder.MinimumLength(8)
-                .MaximumLength(500)
+            return ruleBuilder.MinimumLength(8).MaximumLength(500)
                 .Matches(UserValidationConfiguration.AcceptedPasswordRegex);
         }
     }

@@ -34,15 +34,13 @@ namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
                 .AddScoped<IUsersFindByIdRepository, UsersFindByIdRepository>()
                 .AddScoped<IUsersWriteRepository, UsersWriteRepository>()
                 .AddScoped<IUsersFindByEmailRepository,
-                    UsersFindByEmailRepository>()
-                .AddFluentMigratorCore()
-                .ConfigureRunner(
-                    rb => rb.AddPostgres()
-                        .WithGlobalConnectionString(
-                            options.ConnectionOptions.ConnectionString)
-                        .ScanIn(Assembly.GetExecutingAssembly())
-                        .For.Migrations())
-                .AddTransient<MigrationService>();
+                    UsersFindByEmailRepository>().AddFluentMigratorCore()
+                .ConfigureRunner(rb =>
+                    rb.AddPostgres()
+                        .WithGlobalConnectionString(options.ConnectionOptions
+                            .ConnectionString)
+                        .ScanIn(Assembly.GetExecutingAssembly()).For
+                        .Migrations()).AddTransient<MigrationService>();
             if (!CheckRepositoriesFromDomain(services))
             {
                 throw new InvalidOperationException(
@@ -52,14 +50,16 @@ namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
             return services;
         }
 
-        public static async Task InitializeDapperAsync(this IServiceScope scope)
+        public static async Task InitializeDapperAsync(
+            this IServiceScope scope)
         {
             var migrations = scope.ServiceProvider
                 .GetRequiredService<MigrationService>();
             await migrations.InitializeAsync();
         }
 
-        private static DapperOptions GetOptions(Action<DapperOptions> action)
+        private static DapperOptions GetOptions(
+            Action<DapperOptions> action)
         {
             var options = new DapperOptions();
             action(options);
@@ -76,15 +76,12 @@ namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
                 .ToHashSet();
             var repositoryClassesFromThisAssembly = descriptors
                 .Select(descriptor => descriptor.ImplementationType)
-                .Where(
-                    type => type is not null &&
-                            type.IsAssignableTo(typeof(IRepository)) &&
-                            type.IsClass)
-                .Where(
-                    repositoryClass => repositoryInterfacesFromDomain.Any(
-                        repositoryInterface =>
-                            repositoryInterface.IsAssignableFrom(
-                                repositoryClass)))
+                .Where(type =>
+                    type is not null &&
+                    type.IsAssignableTo(typeof(IRepository)) &&
+                    type.IsClass).Where(repositoryClass =>
+                    repositoryInterfacesFromDomain.Any(repositoryInterface =>
+                        repositoryInterface.IsAssignableFrom(repositoryClass)))
                 .ToHashSet();
             return repositoryInterfacesFromDomain.Count ==
                    repositoryClassesFromThisAssembly.Count;

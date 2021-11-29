@@ -8,9 +8,8 @@ using Npgsql;
 
 namespace Conduit.Auth.Infrastructure.Dapper.Connection
 {
-    public class NpgsqlConnectionProvider
-        : IApplicationConnectionProvider,
-            IAsyncDisposable
+    public class NpgsqlConnectionProvider : IApplicationConnectionProvider,
+        IAsyncDisposable
     {
         private readonly IOptionsMonitor<DapperOptions> _optionsMonitor;
 
@@ -30,9 +29,7 @@ namespace Conduit.Auth.Infrastructure.Dapper.Connection
             var options = _optionsMonitor.CurrentValue;
             var connectionsString = options.ConnectionOptions.ConnectionString;
             _currentScopeConnection = await GetConnectionAsync(
-                _currentScopeConnection,
-                connectionsString,
-                cancellationToken);
+                _currentScopeConnection, connectionsString, cancellationToken);
             return _currentScopeConnection;
         }
 

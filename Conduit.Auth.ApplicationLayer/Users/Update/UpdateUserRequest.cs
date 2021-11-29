@@ -6,7 +6,8 @@ namespace Conduit.Auth.ApplicationLayer.Users.Update
 {
     public class UpdateUserRequest : IRequest<Outcome<UserResponse>>
     {
-        public UpdateUserRequest(UpdateUserModel user)
+        public UpdateUserRequest(
+            UpdateUserModel user)
         {
             User = user;
         }

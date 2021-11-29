@@ -20,7 +20,9 @@ namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
 
     public class Outcome<T>
     {
-        internal Outcome(T? result, OutcomeType type)
+        internal Outcome(
+            T? result,
+            OutcomeType type)
         {
             Result = result;
             Type = type;
@@ -30,7 +32,8 @@ namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
 
         public OutcomeType Type { get; }
 
-        public static implicit operator bool(Outcome<T> outcome)
+        public static implicit operator bool(
+            Outcome<T> outcome)
         {
             return outcome.Type == OutcomeType.Successful;
         }

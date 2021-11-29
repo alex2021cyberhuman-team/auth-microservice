@@ -10,8 +10,9 @@ using Conduit.Auth.Infrastructure.JwtTokens;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
-using FluentValidation;
+using Conduit.Shared.Events.Services;
 using Conduit.Shared.Tokens;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -28,27 +29,22 @@ var environment = builder.Environment;
 var configuration = builder.Configuration;
 
 services.AddControllers();
-services.AddSwaggerGen(
-    c =>
-    {
-        c.SwaggerDoc(
-            "v1",
-            new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
-    });
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
+});
 
 services.AddDapper(configuration.GetSection("Dapper").Bind)
-    .AddJwtIssuerServices()
-    .AddJwtServices(configuration.GetSection("Jwt").Bind)
-    .AddW3CLogging(configuration.GetSection("W3C").Bind)
-    .AddHttpClient()
+    .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
+    .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(PipelineLogger<,>))
     .AddTransient<IPasswordManager, PasswordManager>()
     .AddSingleton<IIdManager, IdManager>()
-    .AddSingleton<IImageChecker, ImageChecker>()
-    .AddHttpContextAccessor()
+    .AddSingleton<IImageChecker, ImageChecker>().AddHttpContextAccessor()
     .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
     .AddMediatR(typeof(GetCurrentUserRequestHandler).Assembly)
-    .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly);
+    .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly)
+    .RegisterRabbitMqConnection(configuration.GetSection("RabbitMQ").Bind);
 
 #endregion
 
@@ -60,9 +56,8 @@ if (environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(
-        c => c.SwaggerEndpoint(
-            "/swagger/v1/swagger.json",
+    app.UseSwaggerUI(c =>
+        c.SwaggerEndpoint("/swagger/v1/swagger.json",
             "Conduit.Auth.WebApi v1"));
     IdentityModelEventSource.ShowPII = true;
 }

@@ -51,8 +51,7 @@ namespace Conduit.Auth.Domain.Users.Repositories
             var repository = unitOfWork
                 .GetRequiredRepository<IUsersFindByEmailRepository>();
             var user = await repository.FindByEmailAsync(
-                email,
-                cancellationToken);
+                email, cancellationToken);
             return user is null ||
                    passwordManager.VerifyPassword(plainPassword, user)
                 ? user
@@ -67,8 +66,7 @@ namespace Conduit.Auth.Domain.Users.Repositories
             var repository = unitOfWork
                 .GetRequiredRepository<IUsersFindByEmailRepository>();
             var user = await repository.FindByEmailAsync(
-                email,
-                cancellationToken);
+                email, cancellationToken);
             return user;
         }
 
@@ -80,8 +78,7 @@ namespace Conduit.Auth.Domain.Users.Repositories
             var repository = unitOfWork
                 .GetRequiredRepository<IUsersFindByUsernameRepository>();
             var user = await repository.FindByUsernameAsync(
-                username,
-                cancellationToken);
+                username, cancellationToken);
             return user;
         }
     }

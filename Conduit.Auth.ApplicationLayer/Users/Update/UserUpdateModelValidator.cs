@@ -6,7 +6,8 @@ namespace Conduit.Auth.ApplicationLayer.Users.Update
 {
     public class UserUpdateModelValidator : AbstractValidator<UpdateUserModel>
     {
-        public UserUpdateModelValidator(IImageChecker imageChecker)
+        public UserUpdateModelValidator(
+            IImageChecker imageChecker)
         {
             RuleFor(x => x.Username).ValidUsername();
             RuleFor(x => x.Email).EmailAddress();

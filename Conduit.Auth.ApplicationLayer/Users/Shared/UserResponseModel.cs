@@ -6,7 +6,9 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
 {
     public class UserResponseModel
     {
-        public UserResponseModel(User user, TokenOutput token)
+        public UserResponseModel(
+            User user,
+            TokenOutput token)
         {
             Username = user.Username;
             Email = user.Email;

@@ -13,8 +13,8 @@ using MediatR;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Update
 {
-    public class UpdateUserRequestHandler
-        : IRequestHandler<UpdateUserRequest, Outcome<UserResponse>>
+    public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
+        Outcome<UserResponse>>
     {
         private readonly ICurrentUserProvider _currentUserProvider;
         private readonly IPasswordManager _passwordManager;
@@ -79,10 +79,8 @@ namespace Conduit.Auth.ApplicationLayer.Users.Update
                 Biography = model.Bio ?? source.Biography,
                 Image = model.Image ?? source.Image
             };
-            var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(
-                newUser,
-                _passwordManager,
-                cancellationToken);
+            var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(newUser,
+                _passwordManager, cancellationToken);
             return user;
         }
     }

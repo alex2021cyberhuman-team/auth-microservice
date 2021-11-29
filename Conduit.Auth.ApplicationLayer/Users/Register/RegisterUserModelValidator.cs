@@ -4,10 +4,11 @@ using FluentValidation;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Register
 {
-    public class RegisterUserModelValidator
-        : AbstractValidator<RegisterUserModel>
+    public class
+        RegisterUserModelValidator : AbstractValidator<RegisterUserModel>
     {
-        public RegisterUserModelValidator(IImageChecker imageChecker)
+        public RegisterUserModelValidator(
+            IImageChecker imageChecker)
         {
             RuleFor(x => x.Username).ValidUsername().NotEmpty();
             RuleFor(x => x.Email).NotEmpty().EmailAddress();

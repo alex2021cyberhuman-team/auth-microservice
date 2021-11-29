@@ -8,7 +8,8 @@ namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public ServiceProviderUnitOfWork(IServiceProvider serviceProvider)
+        public ServiceProviderUnitOfWork(
+            IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }

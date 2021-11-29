@@ -15,8 +15,8 @@ namespace Conduit.Auth.WebApi.Controllers.Users
     [Route("user")]
     public class UserController : SharedController
     {
-        public UserController(IMediator mediator)
-            : base(mediator)
+        public UserController(
+            IMediator mediator) : base(mediator)
         {
         }
 
@@ -29,8 +29,7 @@ namespace Conduit.Auth.WebApi.Controllers.Users
         {
             return await
                 Send<Outcome<UserResponse>, UpdateUserRequest, UserResponse>(
-                    request,
-                    cancellationToken: cancellationToken);
+                    request, cancellationToken: cancellationToken);
         }
 
         [HttpGet(Name = "getCurrentUser")]

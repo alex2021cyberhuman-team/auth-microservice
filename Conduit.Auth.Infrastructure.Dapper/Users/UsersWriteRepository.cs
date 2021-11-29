@@ -35,10 +35,8 @@ namespace Conduit.Auth.Infrastructure.Dapper.Users
         {
             var connection =
                 await _provider.CreateConnectionAsync(cancellationToken);
-            await connection.Get(_compiler)
-                .Query(UsersColumns.TableName)
-                .InsertAsync(
-                    user.AsColumns(),
+            await connection.Get(_compiler).Query(UsersColumns.TableName)
+                .InsertAsync(user.AsColumns(),
                     cancellationToken: cancellationToken);
 
             return (await _findById.FindByIdAsync(user.Id, cancellationToken))!;
@@ -51,10 +49,8 @@ namespace Conduit.Auth.Infrastructure.Dapper.Users
             var connection =
                 await _provider.CreateConnectionAsync(cancellationToken);
             var updatedRows = await connection.Get(_compiler)
-                .Query(UsersColumns.TableName)
-                .Where(UsersColumns.Id, user.Id)
-                .UpdateAsync(
-                    user.AsColumns(),
+                .Query(UsersColumns.TableName).Where(UsersColumns.Id, user.Id)
+                .UpdateAsync(user.AsColumns(),
                     cancellationToken: cancellationToken);
             return updatedRows switch
             {
@@ -62,9 +58,8 @@ namespace Conduit.Auth.Infrastructure.Dapper.Users
                     "No one row has been updated."),
                 > 1 => throw new InvalidOperationException(
                     "Several rows have been updated."),
-                _ => (await _findById.FindByIdAsync(
-                    user.Id,
-                    cancellationToken))!
+                _ => (await _findById.FindByIdAsync(user.Id, cancellationToken))
+                    !
             };
         }
 

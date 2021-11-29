@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Conduit.Auth.ApplicationLayer
 {
-    public class PipelineLogger<TRequest, TResponse>
-        : IPipelineBehavior<TRequest, TResponse>
-        where TRequest : notnull where TResponse : ITypedOutcome
+    public class
+        PipelineLogger<TRequest, TResponse> : IPipelineBehavior<TRequest,
+            TResponse> where TRequest : notnull where TResponse : ITypedOutcome
     {
         private readonly ILogger<PipelineLogger<TRequest, TResponse>> _logger;
 
@@ -26,10 +26,8 @@ namespace Conduit.Auth.ApplicationLayer
             CancellationToken cancellationToken,
             RequestHandlerDelegate<TResponse> next)
         {
-            _logger.LogInformation(
-                EventIds.StartHandling,
-                "Start handling request: {Request}",
-                request);
+            _logger.LogInformation(EventIds.StartHandling,
+                "Start handling request: {Request}", request);
 
             var result = await next();
 
@@ -40,37 +38,30 @@ namespace Conduit.Auth.ApplicationLayer
 
         #endregion
 
-        private void LogResponse(TRequest request, OutcomeType outcomeType)
+        private void LogResponse(
+            TRequest request,
+            OutcomeType outcomeType)
         {
             switch (outcomeType)
             {
                 case OutcomeType.Successful:
-                    _logger.LogInformation(
-                        EventIds.SuccessfulHandling,
-                        "Successful handling request: {Request}",
-                        request);
+                    _logger.LogInformation(EventIds.SuccessfulHandling,
+                        "Successful handling request: {Request}", request);
                     break;
                 case OutcomeType.Rejected:
-                    _logger.LogInformation(
-                        EventIds.RejectedHandling,
-                        "Rejected request: {Request}",
-                        request);
+                    _logger.LogInformation(EventIds.RejectedHandling,
+                        "Rejected request: {Request}", request);
                     break;
                 case OutcomeType.Failed:
-                    _logger.LogError(
-                        EventIds.FailedHandling,
-                        "Failed request: {Request}",
-                        request);
+                    _logger.LogError(EventIds.FailedHandling,
+                        "Failed request: {Request}", request);
                     break;
                 case OutcomeType.Banned:
-                    _logger.LogInformation(
-                        EventIds.BannedHandling,
-                        "Banned request: {Request}",
-                        request);
+                    _logger.LogInformation(EventIds.BannedHandling,
+                        "Banned request: {Request}", request);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(
-                        nameof(outcomeType),
+                    throw new ArgumentOutOfRangeException(nameof(outcomeType),
                         "outcomeType is invalid");
             }
         }

@@ -9,7 +9,8 @@ namespace Conduit.Auth.Infrastructure.Users.Services
     {
         private readonly HttpClient _client;
 
-        public ImageChecker(HttpClient client)
+        public ImageChecker(
+            HttpClient client)
         {
             _client = client;
         }
@@ -21,10 +22,8 @@ namespace Conduit.Auth.Infrastructure.Users.Services
             CancellationToken cancellationToken)
         {
             var message = new HttpRequestMessage(HttpMethod.Get, url);
-            var response = await _client.SendAsync(
-                message,
-                HttpCompletionOption.ResponseHeadersRead,
-                cancellationToken);
+            var response = await _client.SendAsync(message,
+                HttpCompletionOption.ResponseHeadersRead, cancellationToken);
             if (!response.IsSuccessStatusCode)
             {
                 return false;

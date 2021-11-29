@@ -13,8 +13,8 @@ using MediatR;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Register
 {
-    public class RegisterUserRequestHandler
-        : IRequestHandler<RegisterUserRequest, Outcome<UserResponse>>
+    public class RegisterUserRequestHandler : IRequestHandler<
+        RegisterUserRequest, Outcome<UserResponse>>
     {
         private readonly IIdManager _idManager;
         private readonly IPasswordManager _passwordManager;
@@ -81,17 +81,13 @@ namespace Conduit.Auth.ApplicationLayer.Users.Register
             RegisterUserRequest request,
             CancellationToken cancellationToken)
         {
-            var newUser = new User(
-                _idManager.GenerateId(),
-                request.User.Username,
-                request.User.Email,
-                request.User.Password,
-                request.User.Image,
-                request.User.Bio).WithHashedPassword(_passwordManager);
+            var newUser = new User(_idManager.GenerateId(),
+                    request.User.Username, request.User.Email,
+                    request.User.Password, request.User.Image, request.User.Bio)
+                .WithHashedPassword(_passwordManager);
 
             var user = await _unitOfWork.CreateUserAsync(
-                newUser,
-                cancellationToken);
+                newUser, cancellationToken);
 
             return user;
         }

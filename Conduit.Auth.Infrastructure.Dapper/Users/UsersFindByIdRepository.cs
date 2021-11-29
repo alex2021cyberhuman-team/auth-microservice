@@ -33,8 +33,7 @@ namespace Conduit.Auth.Infrastructure.Dapper.Users
             var connection =
                 await _provider.CreateConnectionAsync(cancellationToken);
             var user = await connection.Get(_compiler)
-                .Query(UsersColumns.TableName)
-                .Where(UsersColumns.Id, id)
+                .Query(UsersColumns.TableName).Where(UsersColumns.Id, id)
                 .FirstOrDefaultAsync<User>(
                     cancellationToken: cancellationToken);
             return user;

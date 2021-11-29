@@ -21,55 +21,11 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
         private readonly RandomNumberGenerator _rng =
             RandomNumberGenerator.Create();
 
-        #region IPasswordManager Members
-
-        /// <summary>
-        ///     Returns a hashed representation of the supplied
-        ///     <paramref name="password" /> for the specified
-        ///     <paramref name="user" />.
-        /// </summary>
-        /// <param name="user">The user whose password is to be hashed.</param>
-        /// <param name="password">The password to hash.</param>
-        /// <returns>
-        ///     A hashed representation of the supplied <paramref name="password" /> for
-        ///     the specified
-        ///     <paramref name="user" />.
-        /// </returns>
-        public string HashPassword(string password, User user)
+        private byte[] HashPassword(
+            string password)
         {
-            return Convert.ToBase64String(HashPassword(password));
-        }
-
-        /// <summary>
-        ///     Returns a <see cref="bool" /> indicating the result of a password hash
-        ///     comparison.
-        /// </summary>
-        /// <param name="user">The user whose password should be verified.</param>
-        /// <param name="plainPassword">The password supplied for comparison.</param>
-        /// <remarks>Implementations of this method should be time consistent.</remarks>
-        public bool VerifyPassword(string plainPassword, User user)
-        {
-            var hashedPassword = user.Password;
-
-            byte[] decodedHashedPassword =
-                Convert.FromBase64String(hashedPassword);
-
-            // read the format marker from the hashed password
-            return decodedHashedPassword.Length != 0 &&
-                   VerifyHashedPassword(decodedHashedPassword, plainPassword);
-        }
-
-        #endregion
-
-        private byte[] HashPassword(string password)
-        {
-            return HashPassword(
-                password,
-                _rng,
-                KeyDerivationPrf.HMACSHA256,
-                _iterCount,
-                256 / 8,
-                256 / 8);
+            return HashPassword(password, _rng, KeyDerivationPrf.HMACSHA256,
+                _iterCount, 256 / 8, 256 / 8);
         }
 
         private static byte[] HashPassword(
@@ -82,11 +38,7 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
         {
             byte[] salt = new byte[saltSize];
             rng.GetBytes(salt);
-            byte[] subkey = KeyDerivation.Pbkdf2(
-                password,
-                salt,
-                prf,
-                iterCount,
+            byte[] subkey = KeyDerivation.Pbkdf2(password, salt, prf, iterCount,
                 numBytesRequested);
 
             var outputBytes = new byte[12 + salt.Length + subkey.Length];
@@ -94,21 +46,19 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
             WriteNetworkByteOrder(outputBytes, 4, (uint)iterCount);
             WriteNetworkByteOrder(outputBytes, 8, (uint)saltSize);
             Buffer.BlockCopy(salt, 0, outputBytes, 12, salt.Length);
-            Buffer.BlockCopy(
-                subkey,
-                0,
-                outputBytes,
-                12 + saltSize,
+            Buffer.BlockCopy(subkey, 0, outputBytes, 12 + saltSize,
                 subkey.Length);
             return outputBytes;
         }
 
-        private static uint ReadNetworkByteOrder(byte[] buffer, int offset)
+        private static uint ReadNetworkByteOrder(
+            byte[] buffer,
+            int offset)
         {
             return ((uint)buffer[offset + 0] << 24) |
                    ((uint)buffer[offset + 1] << 16) |
                    ((uint)buffer[offset + 2] << 8) |
-                   (uint)buffer[offset + 3];
+                   buffer[offset + 3];
         }
 
         private static bool VerifyHashedPassword(
@@ -118,9 +68,8 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
             try
             {
                 // Read header information
-                var prf = (KeyDerivationPrf)ReadNetworkByteOrder(
-                    hashedPassword,
-                    0);
+                var prf =
+                    (KeyDerivationPrf)ReadNetworkByteOrder(hashedPassword, 0);
                 var iterCount = (int)ReadNetworkByteOrder(hashedPassword, 4);
                 var saltLength = (int)ReadNetworkByteOrder(hashedPassword, 8);
 
@@ -141,22 +90,13 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
                 }
 
                 byte[] expectedSubkey = new byte[subkeyLength];
-                Buffer.BlockCopy(
-                    hashedPassword,
-                    12 + salt.Length,
-                    expectedSubkey,
-                    0,
-                    expectedSubkey.Length);
+                Buffer.BlockCopy(hashedPassword, 12 + salt.Length,
+                    expectedSubkey, 0, expectedSubkey.Length);
 
                 // Hash the incoming password and verify it
-                byte[] actualSubkey = KeyDerivation.Pbkdf2(
-                    password,
-                    salt,
-                    prf,
-                    iterCount,
-                    subkeyLength);
-                return CryptographicOperations.FixedTimeEquals(
-                    actualSubkey,
+                byte[] actualSubkey = KeyDerivation.Pbkdf2(password, salt, prf,
+                    iterCount, subkeyLength);
+                return CryptographicOperations.FixedTimeEquals(actualSubkey,
                     expectedSubkey);
             }
             catch
@@ -178,5 +118,49 @@ namespace Conduit.Auth.Infrastructure.Users.Passwords
             buffer[offset + 2] = (byte)(value >> 8);
             buffer[offset + 3] = (byte)(value >> 0);
         }
+
+        #region IPasswordManager Members
+
+        /// <summary>
+        ///     Returns a hashed representation of the supplied
+        ///     <paramref name="password" /> for the specified
+        ///     <paramref name="user" />.
+        /// </summary>
+        /// <param name="user">The user whose password is to be hashed.</param>
+        /// <param name="password">The password to hash.</param>
+        /// <returns>
+        ///     A hashed representation of the supplied <paramref name="password" /> for
+        ///     the specified
+        ///     <paramref name="user" />.
+        /// </returns>
+        public string HashPassword(
+            string password,
+            User user)
+        {
+            return Convert.ToBase64String(HashPassword(password));
+        }
+
+        /// <summary>
+        ///     Returns a <see cref="bool" /> indicating the result of a password hash
+        ///     comparison.
+        /// </summary>
+        /// <param name="user">The user whose password should be verified.</param>
+        /// <param name="plainPassword">The password supplied for comparison.</param>
+        /// <remarks>Implementations of this method should be time consistent.</remarks>
+        public bool VerifyPassword(
+            string plainPassword,
+            User user)
+        {
+            var hashedPassword = user.Password;
+
+            byte[] decodedHashedPassword =
+                Convert.FromBase64String(hashedPassword);
+
+            // read the format marker from the hashed password
+            return decodedHashedPassword.Length != 0 &&
+                   VerifyHashedPassword(decodedHashedPassword, plainPassword);
+        }
+
+        #endregion
     }
 }

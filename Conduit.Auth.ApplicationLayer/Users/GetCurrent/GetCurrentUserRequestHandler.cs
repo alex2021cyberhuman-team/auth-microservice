@@ -8,8 +8,8 @@ using MediatR;
 
 namespace Conduit.Auth.ApplicationLayer.Users.GetCurrent
 {
-    public class GetCurrentUserRequestHandler
-        : IRequestHandler<GetCurrentUserRequest, Outcome<UserResponse>>
+    public class GetCurrentUserRequestHandler : IRequestHandler<
+        GetCurrentUserRequest, Outcome<UserResponse>>
     {
         private readonly ICurrentUserProvider _currentUserProvider;
         private readonly ITokenProvider _tokenProvider;

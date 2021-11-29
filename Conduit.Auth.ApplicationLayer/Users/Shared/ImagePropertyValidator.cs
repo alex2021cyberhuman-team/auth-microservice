@@ -10,7 +10,8 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
     {
         private readonly IImageChecker _imageChecker;
 
-        public ImagePropertyValidator(IImageChecker imageChecker)
+        public ImagePropertyValidator(
+            IImageChecker imageChecker)
         {
             _imageChecker = imageChecker;
         }

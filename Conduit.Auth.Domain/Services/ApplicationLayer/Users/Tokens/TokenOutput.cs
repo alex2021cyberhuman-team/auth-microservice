@@ -4,7 +4,8 @@ namespace Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens
 {
     public class TokenOutput
     {
-        public TokenOutput(string accessToken)
+        public TokenOutput(
+            string accessToken)
         {
             AccessToken = accessToken;
         }

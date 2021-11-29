@@ -33,12 +33,10 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
             }
 
             var user =
-                await _findByEmailRepository.FindByEmailAsync(
-                    value,
+                await _findByEmailRepository.FindByEmailAsync(value,
                     cancellation);
 
-            return await user.CheckCurrentUser(
-                _currentUserProvider,
+            return await user.CheckCurrentUser(_currentUserProvider,
                 cancellation);
         }
     }

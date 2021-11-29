@@ -12,7 +12,8 @@ namespace Conduit.Auth.WebApi.Controllers
     {
         protected readonly IMediator _mediator;
 
-        public SharedController(IMediator mediator)
+        public SharedController(
+            IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -30,8 +31,7 @@ namespace Conduit.Auth.WebApi.Controllers
         }
 
         private IActionResult DefaultResultFactory<TResponse, TResult>(
-            TResponse response)
-            where TResponse : Outcome<TResult>
+            TResponse response) where TResponse : Outcome<TResult>
         {
             switch (response.Type)
             {
@@ -52,8 +52,7 @@ namespace Conduit.Auth.WebApi.Controllers
                     foreach (var error in rejectedOutcome.ValidationResult
                         .Errors)
                     {
-                        ModelState.AddModelError(
-                            error.PropertyName,
+                        ModelState.AddModelError(error.PropertyName,
                             error.ErrorMessage);
                     }
 

@@ -12,13 +12,11 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
             @"^(?![0-9-._])[a-zA-Z0-9@._-]+(?<![_.-])$";
 
         public static readonly Regex AcceptedPasswordRegex = new(
-            AcceptedPasswordRegexPattern,
-            RegexOptions.Compiled,
+            AcceptedPasswordRegexPattern, RegexOptions.Compiled,
             TimeSpan.FromMilliseconds(25));
 
         public static readonly Regex AcceptedUsernameRegex = new(
-            AcceptedUsernameRegexPattern,
-            RegexOptions.Compiled,
+            AcceptedUsernameRegexPattern, RegexOptions.Compiled,
             TimeSpan.FromMilliseconds(25));
     }
 }

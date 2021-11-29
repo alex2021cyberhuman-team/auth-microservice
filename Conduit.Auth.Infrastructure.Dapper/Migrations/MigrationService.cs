@@ -7,7 +7,8 @@ namespace Conduit.Auth.Infrastructure.Dapper.Migrations
     {
         private readonly IMigrationRunner _runner;
 
-        public MigrationService(IMigrationRunner runner)
+        public MigrationService(
+            IMigrationRunner runner)
         {
             _runner = runner;
         }

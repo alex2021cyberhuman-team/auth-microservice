@@ -10,8 +10,8 @@ using MediatR;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Login
 {
-    public class LoginUserRequestHandler
-        : IRequestHandler<LoginUserRequest, Outcome<UserResponse>>
+    public class LoginUserRequestHandler : IRequestHandler<LoginUserRequest,
+        Outcome<UserResponse>>
     {
         private readonly IPasswordManager _passwordManager;
         private readonly ITokenProvider _tokenProvider;
@@ -34,18 +34,15 @@ namespace Conduit.Auth.ApplicationLayer.Users.Login
             CancellationToken cancellationToken)
         {
             var user = await _unitOfWork.FindUserByPasswordEmailAsync(
-                request.User.Password,
-                request.User.Email,
-                _passwordManager,
+                request.User.Password, request.User.Email, _passwordManager,
                 cancellationToken);
             if (user is null)
             {
                 return Outcome.New<UserResponse>(OutcomeType.Banned);
             }
 
-            var token = await _tokenProvider.CreateTokenAsync(
-                user,
-                cancellationToken);
+            var token =
+                await _tokenProvider.CreateTokenAsync(user, cancellationToken);
             var response = new UserResponse(user, token);
             return Outcome.New(OutcomeType.Successful, response);
         }

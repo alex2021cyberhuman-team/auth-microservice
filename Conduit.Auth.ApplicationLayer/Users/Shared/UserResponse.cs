@@ -5,7 +5,9 @@ namespace Conduit.Auth.ApplicationLayer.Users.Shared
 {
     public class UserResponse
     {
-        public UserResponse(User user, TokenOutput token)
+        public UserResponse(
+            User user,
+            TokenOutput token)
         {
             User = new(user, token);
         }

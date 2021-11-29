@@ -53,8 +53,7 @@ namespace Conduit.Auth.Infrastructure.Users.Services
                 return null;
             }
 
-            if (_requestUser is null ||
-                _requestUser.Id != id.Value)
+            if (_requestUser is null || _requestUser.Id != id.Value)
             {
                 _requestUser = await _unitOfWork
                     .GetRequiredRepository<IUsersFindByIdRepository>()

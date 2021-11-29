@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Conduit.Auth.Domain.Services;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
 using Conduit.Auth.Domain.Users;
+using Conduit.Shared.Tokens;
 using Microsoft.Extensions.Options;
 
 namespace Conduit.Auth.Infrastructure.JwtTokens
@@ -49,13 +50,8 @@ namespace Conduit.Auth.Infrastructure.JwtTokens
             var claims = user.GetCommonClaims()
                 .Append(new(JwtRegisteredClaimNames.Jti, jti));
             var header = new JwtHeader(_options.GetSecurityCredentials());
-            var payload = new JwtPayload(
-                _options.Issuer,
-                _options.Audience,
-                claims,
-                now,
-                now.Add(_options.AccessTokenExpires),
-                now);
+            var payload = new JwtPayload(_options.Issuer, _options.Audience,
+                claims, now, now.Add(_options.AccessTokenExpires), now);
             var accessToken = new JwtSecurityToken(header, payload);
             return accessToken;
         }
