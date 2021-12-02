@@ -10,6 +10,8 @@ using Conduit.Auth.Infrastructure.JwtTokens;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
+using Conduit.Shared.Events.Models.Users.Register;
+using Conduit.Shared.Events.Models.Users.Update;
 using Conduit.Shared.Events.Services;
 using Conduit.Shared.Tokens;
 using FluentValidation;
@@ -44,7 +46,9 @@ services.AddDapper(configuration.GetSection("Dapper").Bind)
     .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
     .AddMediatR(typeof(GetCurrentUserRequestHandler).Assembly)
     .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly)
-    .RegisterRabbitMqConnection(configuration.GetSection("RabbitMQ").Bind);
+    .RegisterRabbitMqConnection(configuration.GetSection("RabbitMQ").Bind)
+    .RegisterProducer<RegisterUserEventModel>()
+    .RegisterProducer<UpdateUserEventModel>();
 
 #endregion
 

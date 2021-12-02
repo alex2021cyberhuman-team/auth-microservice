@@ -8,6 +8,8 @@ using Conduit.Auth.Domain.Services.DataAccess;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Passwords;
 using Conduit.Auth.Domain.Users.Repositories;
+using Conduit.Shared.Events.Models.Users.Register;
+using Conduit.Shared.Events.Services;
 using FluentValidation;
 using MediatR;
 
@@ -16,6 +18,7 @@ namespace Conduit.Auth.ApplicationLayer.Users.Register
     public class RegisterUserRequestHandler : IRequestHandler<
         RegisterUserRequest, Outcome<UserResponse>>
     {
+        private readonly IEventProducer<RegisterUserEventModel> _eventProducer;
         private readonly IIdManager _idManager;
         private readonly IPasswordManager _passwordManager;
         private readonly ITokenProvider _tokenProvider;
@@ -27,43 +30,15 @@ namespace Conduit.Auth.ApplicationLayer.Users.Register
             ITokenProvider tokenProvider,
             IPasswordManager passwordManager,
             IValidator<RegisterUserRequest> validator,
-            IIdManager idManager)
+            IIdManager idManager,
+            IEventProducer<RegisterUserEventModel> eventProducer)
         {
             _unitOfWork = unitOfWork;
             _tokenProvider = tokenProvider;
             _passwordManager = passwordManager;
             _validator = validator;
             _idManager = idManager;
-        }
-
-        #region IRequestHandler<RegisterUserRequest,Outcome<UserResponse>> Members
-
-        public async Task<Outcome<UserResponse>> Handle(
-            RegisterUserRequest request,
-            CancellationToken cancellationToken)
-        {
-            var validationOutcome =
-                await ValidateAsync(request, cancellationToken);
-            if (!validationOutcome)
-            {
-                return validationOutcome;
-            }
-
-            var user = await CreateUserAsync(request, cancellationToken);
-
-            return await CreateUserResponseAsync(user, cancellationToken);
-        }
-
-        #endregion
-
-        private async Task<Outcome<UserResponse>> CreateUserResponseAsync(
-            User user,
-            CancellationToken cancellationToken)
-        {
-            var token =
-                await _tokenProvider.CreateTokenAsync(user, cancellationToken);
-            var response = new UserResponse(user, token);
-            return Outcome.New(OutcomeType.Successful, response);
+            _eventProducer = eventProducer;
         }
 
         private async Task<Outcome<UserResponse>> ValidateAsync(
@@ -91,5 +66,37 @@ namespace Conduit.Auth.ApplicationLayer.Users.Register
 
             return user;
         }
+
+        #region IRequestHandler<RegisterUserRequest,Outcome<UserResponse>> Members
+
+        public async Task<Outcome<UserResponse>> Handle(
+            RegisterUserRequest request,
+            CancellationToken cancellationToken)
+        {
+            var validationOutcome =
+                await ValidateAsync(request, cancellationToken);
+            if (!validationOutcome)
+            {
+                return validationOutcome;
+            }
+
+            var user = await CreateUserAsync(request, cancellationToken);
+            
+            await ProduceRegisterUserEventAsync(user);
+
+            return await _tokenProvider.CreateUserResponseAsync(user,
+                cancellationToken);
+        }
+
+        private async Task ProduceRegisterUserEventAsync(
+            User? user)
+        {
+            var registerUserEventModel = new RegisterUserEventModel(user.Id,
+                user.Username, user.Email, user.Image, user.Biography);
+
+            await _eventProducer.ProduceEventAsync(registerUserEventModel);
+        }
+
+        #endregion
     }
 }
