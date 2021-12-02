@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj"/>
-    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj"/>
-    <ProjectReference Include="..\Conduit.Auth.Infrastructure\Conduit.Auth.Infrastructure.csproj"/>
+    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure\Conduit.Auth.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
