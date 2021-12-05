@@ -1,7 +1,6 @@
-namespace Conduit.Auth.Infrastructure.Dapper.Connection
+namespace Conduit.Auth.Infrastructure.Dapper.Connection;
+
+public class NpgsqlConnectionOptions
 {
-    public class NpgsqlConnectionOptions
-    {
-        public string ConnectionString { get; set; } = string.Empty;
-    }
+    public string ConnectionString { get; set; } = string.Empty;
 }

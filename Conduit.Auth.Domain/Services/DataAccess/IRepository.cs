@@ -1,6 +1,5 @@
-namespace Conduit.Auth.Domain.Services.DataAccess
+namespace Conduit.Auth.Domain.Services.DataAccess;
+
+public interface IRepository
 {
-    public interface IRepository
-    {
-    }
 }

@@ -1,3 +1,4 @@
+using System;
 using Conduit.Auth.ApplicationLayer;
 using Conduit.Auth.ApplicationLayer.Users.GetCurrent;
 using Conduit.Auth.ApplicationLayer.Users.Register;
@@ -13,6 +14,7 @@ using Conduit.Auth.Infrastructure.Users.Services;
 using Conduit.Shared.Events.Models.Users.Register;
 using Conduit.Shared.Events.Models.Users.Update;
 using Conduit.Shared.Events.Services;
+using Conduit.Shared.Startup;
 using Conduit.Shared.Tokens;
 using FluentValidation;
 using MediatR;
@@ -36,8 +38,9 @@ services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
 });
 
-services.AddDapper(configuration.GetSection("Dapper").Bind)
-    .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
+services.AddHealthChecks().Services
+    .AddDapper(configuration.GetSection("Dapper").Bind).AddJwtIssuerServices()
+    .AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(PipelineLogger<,>))
     .AddTransient<IPasswordManager, PasswordManager>()
@@ -46,7 +49,7 @@ services.AddDapper(configuration.GetSection("Dapper").Bind)
     .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
     .AddMediatR(typeof(GetCurrentUserRequestHandler).Assembly)
     .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly)
-    .RegisterRabbitMqConnection(configuration.GetSection("RabbitMQ").Bind)
+    .RegisterRabbitMqWithHealthCheck(configuration.GetSection("RabbitMQ").Bind)
     .RegisterProducer<RegisterUserEventModel>()
     .RegisterProducer<UpdateUserEventModel>();
 
@@ -67,13 +70,22 @@ if (environment.IsDevelopment())
 }
 
 app.UseW3CLogging();
+
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(x =>
+{
+    x.MapControllers();
+    x.MapHealthChecks("/health");
+});
 
 var initializationScope = app.Services.CreateScope();
-await initializationScope.InitializeDapperAsync();
+
+await initializationScope.WaitHealthyServicesAsync(TimeSpan.FromHours(1));
+await initializationScope.InitializeDatabaseAsync();
+await initializationScope.InitializeQueuesAsync();
 
 #endregion
 

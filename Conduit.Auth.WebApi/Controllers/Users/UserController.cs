@@ -9,38 +9,37 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Conduit.Auth.WebApi.Controllers.Users
+namespace Conduit.Auth.WebApi.Controllers.Users;
+
+[ApiController]
+[Route("user")]
+public class UserController : SharedController
 {
-    [ApiController]
-    [Route("user")]
-    public class UserController : SharedController
+    public UserController(
+        IMediator mediator) : base(mediator)
     {
-        public UserController(
-            IMediator mediator) : base(mediator)
-        {
-        }
+    }
 
-        [Authorize]
-        [HttpPut(Name = "updateUser")]
-        [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> UpdateUser(
-            [FromBody] UpdateUserRequest request,
-            CancellationToken cancellationToken = default)
-        {
-            return await
-                Send<Outcome<UserResponse>, UpdateUserRequest, UserResponse>(
-                    request, cancellationToken: cancellationToken);
-        }
+    [Authorize]
+    [HttpPut(Name = "updateUser")]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> UpdateUser(
+        [FromBody] UpdateUserRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        return await
+            Send<Outcome<UserResponse>, UpdateUserRequest, UserResponse>(
+                request, cancellationToken: cancellationToken);
+    }
 
-        [HttpGet(Name = "getCurrentUser")]
-        [Authorize]
-        [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetCurrentUser(
-            CancellationToken cancellationToken = default)
-        {
-            return await
-                Send<Outcome<UserResponse>, GetCurrentUserRequest,
-                    UserResponse>(new(), cancellationToken: cancellationToken);
-        }
+    [HttpGet(Name = "getCurrentUser")]
+    [Authorize]
+    [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCurrentUser(
+        CancellationToken cancellationToken = default)
+    {
+        return await
+            Send<Outcome<UserResponse>, GetCurrentUserRequest, UserResponse>(
+                new(), cancellationToken: cancellationToken);
     }
 }

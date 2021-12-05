@@ -3,17 +3,16 @@ using Conduit.Auth.ApplicationLayer.Users.Shared;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
 using MediatR;
 
-namespace Conduit.Auth.ApplicationLayer.Users.Register
-{
-    public class RegisterUserRequest : IRequest<Outcome<UserResponse>>
-    {
-        public RegisterUserRequest(
-            RegisterUserModel user)
-        {
-            User = user;
-        }
+namespace Conduit.Auth.ApplicationLayer.Users.Register;
 
-        [Required]
-        public RegisterUserModel User { get; set; }
+public class RegisterUserRequest : IRequest<Outcome<UserResponse>>
+{
+    public RegisterUserRequest(
+        RegisterUserModel user)
+    {
+        User = user;
     }
+
+    [Required]
+    public RegisterUserModel User { get; set; }
 }

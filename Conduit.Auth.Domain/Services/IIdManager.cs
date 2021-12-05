@@ -1,9 +1,8 @@
 using System;
 
-namespace Conduit.Auth.Domain.Services
+namespace Conduit.Auth.Domain.Services;
+
+public interface IIdManager
 {
-    public interface IIdManager
-    {
-        Guid GenerateId();
-    }
+    Guid GenerateId();
 }

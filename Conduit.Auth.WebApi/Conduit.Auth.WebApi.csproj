@@ -8,16 +8,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <ProjectReference Include="..\Conduit.Auth.ApplicationLayer\Conduit.Auth.ApplicationLayer.csproj"/>
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure.Dapper\Conduit.Auth.Infrastructure.Dapper.csproj"/>
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure.JwtTokens\Conduit.Auth.Infrastructure.JwtTokens.csproj"/>
+    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conduit.Auth.ApplicationLayer\Conduit.Auth.ApplicationLayer.csproj" />
-    <ProjectReference Include="..\Conduit.Auth.Infrastructure.Dapper\Conduit.Auth.Infrastructure.Dapper.csproj" />
-    <ProjectReference Include="..\Conduit.Auth.Infrastructure.JwtTokens\Conduit.Auth.Infrastructure.JwtTokens.csproj" />
-    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj" />
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.1-rc2.3"/>
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.1-rc2.3"/>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.4"/>
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0"/>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3"/>
   </ItemGroup>
 
 </Project>

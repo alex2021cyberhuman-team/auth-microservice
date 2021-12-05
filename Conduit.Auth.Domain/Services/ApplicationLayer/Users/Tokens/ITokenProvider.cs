@@ -2,12 +2,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Users;
 
-namespace Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens
+namespace Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
+
+public interface ITokenProvider
 {
-    public interface ITokenProvider
-    {
-        Task<TokenOutput> CreateTokenAsync(
-            User user,
-            CancellationToken cancellationToken = default);
-    }
+    Task<TokenOutput> CreateTokenAsync(
+        User user,
+        CancellationToken cancellationToken = default);
 }
