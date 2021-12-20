@@ -48,7 +48,8 @@ public class JwtTokenProvider : ITokenProvider
         DateTime now)
     {
         var claims = user.GetCommonClaims()
-            .Append(new(JwtRegisteredClaimNames.Jti, jti));
+            .Append(new(JwtRegisteredClaimNames.Jti, jti))
+            .Append(new(JwtRegisteredClaimNames.Typ, "access"));
         var header = new JwtHeader(_options.GetSecurityCredentials());
         var payload = new JwtPayload(_options.Issuer, _options.Audience, claims,
             now, now.Add(_options.AccessTokenExpires), now);

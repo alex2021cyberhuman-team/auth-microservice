@@ -41,6 +41,24 @@ public class RegisterUserRequestHandler : IRequestHandler<
         _eventProducer = eventProducer;
     }
 
+    public async Task<Outcome<UserResponse>> Handle(
+        RegisterUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var validationOutcome = await ValidateAsync(request, cancellationToken);
+        if (!validationOutcome)
+        {
+            return validationOutcome;
+        }
+
+        var user = await CreateUserAsync(request, cancellationToken);
+
+        await ProduceRegisterUserEventAsync(user);
+
+        return await _tokenProvider.CreateUserResponseAsync(user,
+            cancellationToken);
+    }
+
     private async Task<Outcome<UserResponse>> ValidateAsync(
         RegisterUserRequest request,
         CancellationToken cancellationToken)
@@ -66,34 +84,12 @@ public class RegisterUserRequestHandler : IRequestHandler<
         return user;
     }
 
-    #region IRequestHandler<RegisterUserRequest,Outcome<UserResponse>> Members
-
-    public async Task<Outcome<UserResponse>> Handle(
-        RegisterUserRequest request,
-        CancellationToken cancellationToken)
-    {
-        var validationOutcome = await ValidateAsync(request, cancellationToken);
-        if (!validationOutcome)
-        {
-            return validationOutcome;
-        }
-
-        var user = await CreateUserAsync(request, cancellationToken);
-
-        await ProduceRegisterUserEventAsync(user);
-
-        return await _tokenProvider.CreateUserResponseAsync(user,
-            cancellationToken);
-    }
-
     private async Task ProduceRegisterUserEventAsync(
-        User? user)
+        User user)
     {
         var registerUserEventModel = new RegisterUserEventModel(user.Id,
             user.Username, user.Email, user.Image, user.Biography);
 
         await _eventProducer.ProduceEventAsync(registerUserEventModel);
     }
-
-    #endregion
 }

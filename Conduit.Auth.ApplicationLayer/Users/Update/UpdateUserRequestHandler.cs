@@ -41,26 +41,6 @@ public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
         _eventProducer = eventProducer;
     }
 
-    private async Task<User> UpdateUserAsync(
-        UpdateUserRequest request,
-        User source,
-        CancellationToken cancellationToken)
-    {
-        var model = request.User;
-        var newUser = source with
-        {
-            Email = model.Email ?? source.Email,
-            Password = model.Password ?? source.Password,
-            Biography = model.Bio ?? source.Biography,
-            Image = model.Image ?? source.Image
-        };
-        var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(newUser,
-            _passwordManager, cancellationToken);
-        return user;
-    }
-
-    #region IRequestHandler<UpdateUserRequest,Outcome<UserResponse>> Members
-
     public async Task<Outcome<UserResponse>> Handle(
         UpdateUserRequest request,
         CancellationToken cancellationToken)
@@ -87,14 +67,30 @@ public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
             cancellationToken);
     }
 
+    private async Task<User> UpdateUserAsync(
+        UpdateUserRequest request,
+        User source,
+        CancellationToken cancellationToken)
+    {
+        var model = request.User;
+        var newUser = source with
+        {
+            Email = model.Email ?? source.Email,
+            Password = model.Password ?? source.Password,
+            Biography = model.Bio ?? source.Biography,
+            Image = model.Image ?? source.Image
+        };
+        var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(newUser,
+            _passwordManager, cancellationToken);
+        return user;
+    }
+
     private async Task ProduceUpdateUserEventAsync(
-        User? user)
+        User user)
     {
         var updateUserEventModel = new UpdateUserEventModel(user.Id,
             user.Username, user.Email, user.Image, user.Biography);
 
         await _eventProducer.ProduceEventAsync(updateUserEventModel);
     }
-
-    #endregion
 }

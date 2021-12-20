@@ -7,6 +7,7 @@ using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace Conduit.Auth.WebApi.Controllers.Users;
 
@@ -15,9 +16,12 @@ namespace Conduit.Auth.WebApi.Controllers.Users;
 public class UsersController : SharedController
 {
     public UsersController(
-        IMediator mediator) : base(mediator)
+        IMediator mediator,
+        ILoggerFactory loggerFactory) : base(mediator, loggerFactory)
     {
     }
+
+    protected override string ControllerName { get; } = "UsersController";
 
     [HttpPost(Name = "registerUser")]
     [ProducesResponseType(typeof(UserResponse), StatusCodes.Status200OK)]

@@ -13,7 +13,7 @@ using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
 using Conduit.Shared.Events.Models.Users.Register;
 using Conduit.Shared.Events.Models.Users.Update;
-using Conduit.Shared.Events.Services;
+using Conduit.Shared.Events.Services.RabbitMQ;
 using Conduit.Shared.Startup;
 using Conduit.Shared.Tokens;
 using FluentValidation;

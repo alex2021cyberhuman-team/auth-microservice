@@ -25,3 +25,4 @@ FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Conduit.Auth.WebApi.dll"]
+HEALTHCHECK --retries=10 CMD curl --fail http://localhost/health || exit
