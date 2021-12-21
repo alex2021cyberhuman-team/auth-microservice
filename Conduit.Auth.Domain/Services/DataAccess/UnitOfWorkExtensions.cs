@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Reflection;
 
 namespace Conduit.Auth.Domain.Services.DataAccess;
 
 public static class UnitOfWorkExtensions
 {
-    private static MethodInfo _genericMethod =
+    private static readonly MethodInfo _genericMethod =
         typeof(IUnitOfWork).GetMethod(nameof(IUnitOfWork.GetRepository),
             BindingFlags.Public | BindingFlags.Instance)!;
 

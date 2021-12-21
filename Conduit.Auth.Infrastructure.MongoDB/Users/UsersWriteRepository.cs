@@ -3,11 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Repositories;
-using Conduit.Auth.Infrastructure.MongoDB.Extensions;
 using Conduit.Auth.Infrastructure.MongoDB.Connection;
-using Conduit.Auth.Infrastructure.MongoDB.Users.Mappings;
-using SqlKata.Compilers;
-using SqlKata.Execution;
 
 namespace Conduit.Auth.Infrastructure.MongoDB.Users;
 
@@ -15,10 +11,10 @@ public class UsersWriteRepository : IUsersWriteRepository
 {
     private readonly Compiler _compiler;
     private readonly IUsersFindByIdRepository _findById;
-    private readonly IApplicationConnectionProvider _provider;
+    private readonly IConnectionProvider _provider;
 
     public UsersWriteRepository(
-        IApplicationConnectionProvider provider,
+        IConnectionProvider provider,
         Compiler compiler,
         IUsersFindByIdRepository findById)
     {
@@ -33,8 +29,7 @@ public class UsersWriteRepository : IUsersWriteRepository
         User user,
         CancellationToken cancellationToken = default)
     {
-        var connection =
-            await _provider.CreateConnectionAsync(cancellationToken);
+        var connection = await _provider.GetClient();
         await connection.Get(_compiler).Query(UsersColumns.TableName)
             .InsertAsync(user.AsColumns(),
                 cancellationToken: cancellationToken);
@@ -46,8 +41,7 @@ public class UsersWriteRepository : IUsersWriteRepository
         User user,
         CancellationToken cancellationToken = default)
     {
-        var connection =
-            await _provider.CreateConnectionAsync(cancellationToken);
+        var connection = await _provider.GetClient();
         var updatedRows = await connection.Get(_compiler)
             .Query(UsersColumns.TableName).Where(UsersColumns.Id, user.Id)
             .UpdateAsync(user.AsColumns(),

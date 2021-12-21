@@ -2,40 +2,30 @@
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Repositories;
-using Conduit.Auth.Infrastructure.MongoDB.Extensions;
 using Conduit.Auth.Infrastructure.MongoDB.Connection;
-using Conduit.Auth.Infrastructure.MongoDB.Users.Mappings;
-using SqlKata.Compilers;
-using SqlKata.Execution;
+using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
+using MongoDB.Driver;
 
 namespace Conduit.Auth.Infrastructure.MongoDB.Users;
 
 public class UsersFindByUsernameRepository : IUsersFindByUsernameRepository
 {
-    private readonly Compiler _compiler;
-    private readonly IApplicationConnectionProvider _provider;
+    private readonly IConnectionProvider _connectionProvider;
 
     public UsersFindByUsernameRepository(
-        IApplicationConnectionProvider provider,
-        Compiler compiler)
+        IConnectionProvider connectionProvider)
     {
-        _provider = provider;
-        _compiler = compiler;
+        _connectionProvider = connectionProvider;
     }
-
-    #region IUsersFindByUsernameRepository Members
 
     public async Task<User?> FindByUsernameAsync(
         string username,
         CancellationToken cancellationToken = default)
     {
-        var connection =
-            await _provider.CreateConnectionAsync(cancellationToken);
-        var user = await connection.Get(_compiler).Query(UsersColumns.TableName)
-            .Where(UsersColumns.Username, username)
-            .FirstOrDefaultAsync<User>(cancellationToken: cancellationToken);
-        return user;
-    }
+        var users = _connectionProvider.GetUsersCollection();
+        var asyncCursor = await users.FindAsync(x => x.Username == username,
+            cancellationToken: cancellationToken);
 
-    #endregion
+        return await asyncCursor.ConvertToUserAsync(cancellationToken);
+    }
 }
