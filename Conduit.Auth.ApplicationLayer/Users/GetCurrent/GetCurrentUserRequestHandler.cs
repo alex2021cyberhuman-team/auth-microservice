@@ -21,9 +21,7 @@ public class GetCurrentUserRequestHandler : IRequestHandler<
         _tokenProvider = tokenProvider;
         _currentUserProvider = currentUserProvider;
     }
-
-    #region IRequestHandler<GetCurrentUserRequest,Outcome<UserResponse>> Members
-
+    
     public async Task<Outcome<UserResponse>> Handle(
         GetCurrentUserRequest request,
         CancellationToken cancellationToken)
@@ -40,6 +38,4 @@ public class GetCurrentUserRequestHandler : IRequestHandler<
         var response = new UserResponse(user, token);
         return Outcome.New(OutcomeType.Successful, response);
     }
-
-    #endregion
 }

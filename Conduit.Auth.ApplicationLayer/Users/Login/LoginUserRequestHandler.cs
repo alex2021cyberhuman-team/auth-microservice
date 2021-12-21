@@ -1,4 +1,4 @@
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
@@ -26,9 +26,7 @@ public class LoginUserRequestHandler : IRequestHandler<LoginUserRequest,
         _tokenProvider = tokenProvider;
         _passwordManager = passwordManager;
     }
-
-    #region IRequestHandler<LoginUserRequest,Outcome<UserResponse>> Members
-
+    
     public async Task<Outcome<UserResponse>> Handle(
         LoginUserRequest request,
         CancellationToken cancellationToken)
@@ -46,6 +44,4 @@ public class LoginUserRequestHandler : IRequestHandler<LoginUserRequest,
         var response = new UserResponse(user, token);
         return Outcome.New(OutcomeType.Successful, response);
     }
-
-    #endregion
 }

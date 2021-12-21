@@ -13,15 +13,11 @@ public class ServiceProviderUnitOfWork : IUnitOfWork
     {
         _serviceProvider = serviceProvider;
     }
-
-    #region IUnitOfWork Members
-
+    
     public TRepository? GetRepository<TRepository>()
         where TRepository : IRepository
     {
         var service = _serviceProvider.GetService<TRepository>();
         return service;
     }
-
-    #endregion
 }

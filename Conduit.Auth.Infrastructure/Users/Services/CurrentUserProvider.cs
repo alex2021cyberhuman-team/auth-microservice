@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,9 +23,7 @@ public class CurrentUserProvider : ICurrentUserProvider
         _httpContextAccessor = httpContextAccessor;
         _unitOfWork = unitOfWork;
     }
-
-    #region ICurrentUserProvider Members
-
+    
     public Task<Guid?> GetCurrentUserIdAsync(
         CancellationToken cancellationToken = default)
     {
@@ -62,6 +60,4 @@ public class CurrentUserProvider : ICurrentUserProvider
 
         return _requestUser;
     }
-
-    #endregion
 }
