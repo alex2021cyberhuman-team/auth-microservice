@@ -6,7 +6,7 @@ using Conduit.Auth.Domain.Services;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
 using Conduit.Auth.Domain.Users.Passwords;
 using Conduit.Auth.Domain.Users.Services;
-using Conduit.Auth.Infrastructure.Dapper.DependencyInjection;
+using Conduit.Auth.Infrastructure.MongoDB.DependencyInjection;
 using Conduit.Auth.Infrastructure.JwtTokens;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
