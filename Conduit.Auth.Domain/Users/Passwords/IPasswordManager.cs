@@ -1,9 +1,12 @@
-﻿namespace Conduit.Auth.Domain.Users.Passwords
-{
-    public interface IPasswordManager
-    {
-        string HashPassword(string plainPassword, User user);
+namespace Conduit.Auth.Domain.Users.Passwords;
 
-        bool VerifyPassword(string plainPassword, User user);
-    }
+public interface IPasswordManager
+{
+    string HashPassword(
+        string plainPassword,
+        User user);
+
+    bool VerifyPassword(
+        string plainPassword,
+        User user);
 }

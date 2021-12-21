@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
@@ -8,82 +8,89 @@ using Conduit.Auth.Domain.Services.DataAccess;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Passwords;
 using Conduit.Auth.Domain.Users.Repositories;
+using Conduit.Shared.Events.Models.Users.Update;
+using Conduit.Shared.Events.Services;
 using FluentValidation;
 using MediatR;
 
-namespace Conduit.Auth.ApplicationLayer.Users.Update
+namespace Conduit.Auth.ApplicationLayer.Users.Update;
+
+public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
+    Outcome<UserResponse>>
 {
-    public class UpdateUserRequestHandler
-        : IRequestHandler<UpdateUserRequest, Outcome<UserResponse>>
+    private readonly ICurrentUserProvider _currentUserProvider;
+    private readonly IEventProducer<UpdateUserEventModel> _eventProducer;
+    private readonly IPasswordManager _passwordManager;
+    private readonly ITokenProvider _tokenProvider;
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IValidator<UpdateUserRequest> _validator;
+
+    public UpdateUserRequestHandler(
+        IUnitOfWork unitOfWork,
+        ITokenProvider tokenProvider,
+        IPasswordManager passwordManager,
+        IValidator<UpdateUserRequest> validator,
+        ICurrentUserProvider currentUserProvider,
+        IEventProducer<UpdateUserEventModel> eventProducer)
     {
-        private readonly ICurrentUserProvider _currentUserProvider;
-        private readonly IPasswordManager _passwordManager;
-        private readonly ITokenProvider _tokenProvider;
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IValidator<UpdateUserRequest> _validator;
+        _unitOfWork = unitOfWork;
+        _tokenProvider = tokenProvider;
+        _passwordManager = passwordManager;
+        _validator = validator;
+        _currentUserProvider = currentUserProvider;
+        _eventProducer = eventProducer;
+    }
 
-        public UpdateUserRequestHandler(
-            IUnitOfWork unitOfWork,
-            ITokenProvider tokenProvider,
-            IPasswordManager passwordManager,
-            IValidator<UpdateUserRequest> validator,
-            ICurrentUserProvider currentUserProvider)
+    public async Task<Outcome<UserResponse>> Handle(
+        UpdateUserRequest request,
+        CancellationToken cancellationToken)
+    {
+        var validationResult =
+            await _validator.ValidateAsync(request, cancellationToken);
+        if (!validationResult.IsValid)
         {
-            _unitOfWork = unitOfWork;
-            _tokenProvider = tokenProvider;
-            _passwordManager = passwordManager;
-            _validator = validator;
-            _currentUserProvider = currentUserProvider;
+            return Outcome.Reject<UserResponse>(validationResult);
         }
 
-        #region IRequestHandler<UpdateUserRequest,Outcome<UserResponse>> Members
-
-        public async Task<Outcome<UserResponse>> Handle(
-            UpdateUserRequest request,
-            CancellationToken cancellationToken)
+        var user =
+            await _currentUserProvider.GetCurrentUserAsync(cancellationToken);
+        if (user is null)
         {
-            var validationResult =
-                await _validator.ValidateAsync(request, cancellationToken);
-            var user =
-                await _currentUserProvider.GetCurrentUserAsync(
-                    cancellationToken);
-            if (user is null)
-            {
-                return Outcome.New<UserResponse>(OutcomeType.Banned);
-            }
-
-            if (!validationResult.IsValid)
-            {
-                return Outcome.Reject<UserResponse>(validationResult);
-            }
-
-            user = await UpdateUserAsync(request, user, cancellationToken);
-            var token =
-                await _tokenProvider.CreateTokenAsync(user, cancellationToken);
-            var response = new UserResponse(user, token);
-            return Outcome.New(OutcomeType.Successful, response);
+            return Outcome.New<UserResponse>(OutcomeType.Banned);
         }
 
-        #endregion
+        user = await UpdateUserAsync(request, user, cancellationToken);
 
-        private async Task<User> UpdateUserAsync(
-            UpdateUserRequest request,
-            User source,
-            CancellationToken cancellationToken)
+        await ProduceUpdateUserEventAsync(user);
+
+        return await _tokenProvider.CreateUserResponseAsync(user,
+            cancellationToken);
+    }
+
+    private async Task<User> UpdateUserAsync(
+        UpdateUserRequest request,
+        User source,
+        CancellationToken cancellationToken)
+    {
+        var model = request.User;
+        var newUser = source with
         {
-            var model = request.User;
-            var newUser = source with
-            {
-                Email = model.Email ?? source.Email,
-                Password = model.Password ?? source.Password,
-                Biography = model.Bio ?? source.Biography,
-                Image = model.Image ?? source.Image
-            };
-            var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(
-                newUser,
-                _passwordManager,
-                cancellationToken);
-            return user;
-        }
+            Email = model.Email ?? source.Email,
+            Password = model.Password ?? source.Password,
+            Biography = model.Bio ?? source.Biography,
+            Image = model.Image ?? source.Image
+        };
+        var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(newUser,
+            _passwordManager, cancellationToken);
+        return user;
+    }
+
+    private async Task ProduceUpdateUserEventAsync(
+        User user)
+    {
+        var updateUserEventModel = new UpdateUserEventModel(user.Id,
+            user.Username, user.Email, user.Image, user.Biography);
+
+        await _eventProducer.ProduceEventAsync(updateUserEventModel);
     }
 }

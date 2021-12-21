@@ -1,3 +1,4 @@
+using System;
 using Conduit.Auth.ApplicationLayer;
 using Conduit.Auth.ApplicationLayer.Users.GetCurrent;
 using Conduit.Auth.ApplicationLayer.Users.Register;
@@ -10,6 +11,11 @@ using Conduit.Auth.Infrastructure.JwtTokens;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
+using Conduit.Shared.Events.Models.Users.Register;
+using Conduit.Shared.Events.Models.Users.Update;
+using Conduit.Shared.Events.Services.RabbitMQ;
+using Conduit.Shared.Startup;
+using Conduit.Shared.Tokens;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -27,26 +33,25 @@ var environment = builder.Environment;
 var configuration = builder.Configuration;
 
 services.AddControllers();
-services.AddSwaggerGen(
-    c =>
-    {
-        c.SwaggerDoc(
-            "v1",
-            new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
-    });
+services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
+});
 
-services.AddDapper(configuration.GetSection("Dapper").Bind)
+services.AddHealthChecks().Services
+    .AddDapper(configuration.GetSection("Dapper").Bind).AddJwtIssuerServices()
     .AddJwtServices(configuration.GetSection("Jwt").Bind)
-    .AddW3CLogging(configuration.GetSection("W3C").Bind)
-    .AddHttpClient()
+    .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
     .AddTransient(typeof(IPipelineBehavior<,>), typeof(PipelineLogger<,>))
     .AddTransient<IPasswordManager, PasswordManager>()
     .AddSingleton<IIdManager, IdManager>()
-    .AddSingleton<IImageChecker, ImageChecker>()
-    .AddHttpContextAccessor()
+    .AddSingleton<IImageChecker, ImageChecker>().AddHttpContextAccessor()
     .AddScoped<ICurrentUserProvider, CurrentUserProvider>()
     .AddMediatR(typeof(GetCurrentUserRequestHandler).Assembly)
-    .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly);
+    .AddValidatorsFromAssembly(typeof(RegisterUserModelValidator).Assembly)
+    .RegisterRabbitMqWithHealthCheck(configuration.GetSection("RabbitMQ").Bind)
+    .RegisterProducer<RegisterUserEventModel>()
+    .RegisterProducer<UpdateUserEventModel>();
 
 #endregion
 
@@ -58,21 +63,29 @@ if (environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(
-        c => c.SwaggerEndpoint(
-            "/swagger/v1/swagger.json",
+    app.UseSwaggerUI(c =>
+        c.SwaggerEndpoint("/swagger/v1/swagger.json",
             "Conduit.Auth.WebApi v1"));
     IdentityModelEventSource.ShowPII = true;
 }
 
 app.UseW3CLogging();
+
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
+app.UseEndpoints(x =>
+{
+    x.MapControllers();
+    x.MapHealthChecks("/health");
+});
 
 var initializationScope = app.Services.CreateScope();
-await initializationScope.InitializeDapperAsync();
+
+await initializationScope.WaitHealthyServicesAsync(TimeSpan.FromHours(1));
+await initializationScope.InitializeDatabaseAsync();
+await initializationScope.InitializeQueuesAsync();
 
 #endregion
 

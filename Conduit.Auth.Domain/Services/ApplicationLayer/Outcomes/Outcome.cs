@@ -1,38 +1,40 @@
-﻿using FluentValidation.Results;
+using FluentValidation.Results;
 
-namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
+namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
+
+public static class Outcome
 {
-    public static class Outcome
+    public static Outcome<T> New<T>(
+        OutcomeType type = OutcomeType.Successful,
+        T? result = default)
     {
-        public static Outcome<T> New<T>(
-            OutcomeType type = OutcomeType.Successful,
-            T? result = default)
-        {
-            return new(result, type);
-        }
-
-        public static FluentRejectedOutcome<T> Reject<T>(
-            ValidationResult validationResult)
-        {
-            return new(validationResult);
-        }
+        return new(result, type);
     }
 
-    public class Outcome<T>
+    public static FluentRejectedOutcome<T> Reject<T>(
+        ValidationResult validationResult)
     {
-        internal Outcome(T? result, OutcomeType type)
-        {
-            Result = result;
-            Type = type;
-        }
+        return new(validationResult);
+    }
+}
 
-        public T? Result { get; }
+public class Outcome<T>
+{
+    internal Outcome(
+        T? result,
+        OutcomeType type)
+    {
+        Result = result;
+        Type = type;
+    }
 
-        public OutcomeType Type { get; }
+    public T? Result { get; }
 
-        public static implicit operator bool(Outcome<T> outcome)
-        {
-            return outcome.Type == OutcomeType.Successful;
-        }
+    public OutcomeType Type { get; }
+
+    public static implicit operator bool(
+        Outcome<T> outcome)
+    {
+        return outcome.Type == OutcomeType.Successful;
     }
 }

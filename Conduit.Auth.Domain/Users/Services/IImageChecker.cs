@@ -1,12 +1,11 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 
-namespace Conduit.Auth.Domain.Users.Services
+namespace Conduit.Auth.Domain.Users.Services;
+
+public interface IImageChecker
 {
-    public interface IImageChecker
-    {
-        Task<bool> CheckImageAsync(
-            string url,
-            CancellationToken cancellationToken = default);
-    }
+    Task<bool> CheckImageAsync(
+        string url,
+        CancellationToken cancellationToken = default);
 }

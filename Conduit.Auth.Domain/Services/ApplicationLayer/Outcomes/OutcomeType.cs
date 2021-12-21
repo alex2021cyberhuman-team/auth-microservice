@@ -1,10 +1,9 @@
-﻿namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
+namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
+
+public enum OutcomeType
 {
-    public enum OutcomeType
-    {
-        Successful,
-        Rejected,
-        Failed,
-        Banned
-    }
+    Successful,
+    Rejected,
+    Failed,
+    Banned
 }

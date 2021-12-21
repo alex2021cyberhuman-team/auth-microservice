@@ -1,17 +1,16 @@
-﻿using System;
+using System;
 using Conduit.Auth.Domain.Services;
 
-namespace Conduit.Auth.Infrastructure.Services
+namespace Conduit.Auth.Infrastructure.Services;
+
+public class IdManager : IIdManager
 {
-    public class IdManager : IIdManager
+    #region IIdManager Members
+
+    public Guid GenerateId()
     {
-        #region IIdManager Members
-
-        public Guid GenerateId()
-        {
-            return Guid.NewGuid();
-        }
-
-        #endregion
+        return Guid.NewGuid();
     }
+
+    #endregion
 }

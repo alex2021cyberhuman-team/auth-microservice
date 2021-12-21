@@ -1,9 +1,8 @@
-﻿using Conduit.Auth.Infrastructure.Dapper.Connection;
+using Conduit.Auth.Infrastructure.Dapper.Connection;
 
-namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection
+namespace Conduit.Auth.Infrastructure.Dapper.DependencyInjection;
+
+public class DapperOptions
 {
-    public class DapperOptions
-    {
-        public NpgsqlConnectionOptions ConnectionOptions { get; set; } = new();
-    }
+    public NpgsqlConnectionOptions ConnectionOptions { get; set; } = new();
 }

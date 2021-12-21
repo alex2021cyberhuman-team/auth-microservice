@@ -1,27 +1,27 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using FluentMigrator.Runner;
 
-namespace Conduit.Auth.Infrastructure.Dapper.Migrations
+namespace Conduit.Auth.Infrastructure.Dapper.Migrations;
+
+public class MigrationService
 {
-    public class MigrationService
+    private readonly IMigrationRunner _runner;
+
+    public MigrationService(
+        IMigrationRunner runner)
     {
-        private readonly IMigrationRunner _runner;
+        _runner = runner;
+    }
 
-        public MigrationService(IMigrationRunner runner)
-        {
-            _runner = runner;
-        }
+    public Task InitializeAsync()
+    {
+        RunMigrations();
 
-        public Task InitializeAsync()
-        {
-            RunMigrations();
+        return Task.CompletedTask;
+    }
 
-            return Task.CompletedTask;
-        }
-
-        private void RunMigrations()
-        {
-            _runner.MigrateUp();
-        }
+    private void RunMigrations()
+    {
+        _runner.MigrateUp();
     }
 }

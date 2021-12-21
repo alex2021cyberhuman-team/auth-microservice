@@ -1,15 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Conduit.Auth.ApplicationLayer.Users.Login
+namespace Conduit.Auth.ApplicationLayer.Users.Login;
+
+public class LoginUserModel
 {
-    public class LoginUserModel
-    {
-        [Required]
-        [DataType(DataType.Password)]
-        public string Password { get; set; } = string.Empty;
+    [Required]
+    [DataType(DataType.Password)]
+    public string Password { get; set; } = string.Empty;
 
-        [Required]
-        [EmailAddress]
-        public string Email { get; set; } = string.Empty;
-    }
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; } = string.Empty;
 }

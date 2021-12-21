@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,84 +6,80 @@ using Conduit.Auth.Infrastructure.Dapper.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
-namespace Conduit.Auth.Infrastructure.Dapper.Connection
+namespace Conduit.Auth.Infrastructure.Dapper.Connection;
+
+public class NpgsqlConnectionProvider : IApplicationConnectionProvider,
+    IAsyncDisposable
 {
-    public class NpgsqlConnectionProvider
-        : IApplicationConnectionProvider,
-            IAsyncDisposable
+    private readonly IOptionsMonitor<DapperOptions> _optionsMonitor;
+
+    private NpgsqlConnection? _currentScopeConnection;
+
+    public NpgsqlConnectionProvider(
+        IOptionsMonitor<DapperOptions> optionsMonitor)
     {
-        private readonly IOptionsMonitor<DapperOptions> _optionsMonitor;
+        _optionsMonitor = optionsMonitor;
+    }
 
-        private NpgsqlConnection? _currentScopeConnection;
+    #region IApplicationConnectionProvider Members
 
-        public NpgsqlConnectionProvider(
-            IOptionsMonitor<DapperOptions> optionsMonitor)
+    public async Task<NpgsqlConnection> CreateConnectionAsync(
+        CancellationToken cancellationToken = default)
+    {
+        var options = _optionsMonitor.CurrentValue;
+        var connectionsString = options.ConnectionOptions.ConnectionString;
+        _currentScopeConnection = await GetConnectionAsync(
+            _currentScopeConnection, connectionsString, cancellationToken);
+        return _currentScopeConnection;
+    }
+
+    #endregion
+
+    #region IAsyncDisposable Members
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_currentScopeConnection is not null)
         {
-            _optionsMonitor = optionsMonitor;
+            await _currentScopeConnection.DisposeAsync();
         }
 
-        #region IApplicationConnectionProvider Members
+        GC.SuppressFinalize(this);
+    }
 
-        public async Task<NpgsqlConnection> CreateConnectionAsync(
-            CancellationToken cancellationToken = default)
+    #endregion
+
+    private static async Task<NpgsqlConnection> GetConnectionAsync(
+        NpgsqlConnection? connection,
+        string connectionsString,
+        CancellationToken cancellationToken)
+    {
+        if (connection is null)
         {
-            var options = _optionsMonitor.CurrentValue;
-            var connectionsString = options.ConnectionOptions.ConnectionString;
-            _currentScopeConnection = await GetConnectionAsync(
-                _currentScopeConnection,
-                connectionsString,
-                cancellationToken);
-            return _currentScopeConnection;
+            return await New();
         }
 
-        #endregion
-
-        #region IAsyncDisposable Members
-
-        public async ValueTask DisposeAsync()
+        switch (connection.FullState)
         {
-            if (_currentScopeConnection is not null)
-            {
-                await _currentScopeConnection.DisposeAsync();
-            }
-
-            GC.SuppressFinalize(this);
-        }
-
-        #endregion
-
-        private static async Task<NpgsqlConnection> GetConnectionAsync(
-            NpgsqlConnection? connection,
-            string connectionsString,
-            CancellationToken cancellationToken)
-        {
-            if (connection is null)
-            {
+            case ConnectionState.Closed:
+                await connection.OpenAsync(cancellationToken);
+                return connection;
+            case ConnectionState.Broken:
                 return await New();
-            }
+            case ConnectionState.Open:
+            case ConnectionState.Connecting:
+            case ConnectionState.Open | ConnectionState.Executing:
+            case ConnectionState.Open | ConnectionState.Fetching:
+                return connection;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
 
-            switch (connection.FullState)
-            {
-                case ConnectionState.Closed:
-                    await connection.OpenAsync(cancellationToken);
-                    return connection;
-                case ConnectionState.Broken:
-                    return await New();
-                case ConnectionState.Open:
-                case ConnectionState.Connecting:
-                case ConnectionState.Open | ConnectionState.Executing:
-                case ConnectionState.Open | ConnectionState.Fetching:
-                    return connection;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-
-            async Task<NpgsqlConnection> New()
-            {
-                var newConnection = new NpgsqlConnection(connectionsString);
-                await newConnection.OpenAsync(cancellationToken);
-                return newConnection;
-            }
+        async Task<NpgsqlConnection> New()
+        {
+            var newConnection = new NpgsqlConnection(connectionsString);
+            await newConnection.OpenAsync(cancellationToken);
+            return newConnection;
         }
     }
 }

@@ -1,8 +1,6 @@
-﻿namespace Conduit.Auth.Domain.Services.DataAccess
+namespace Conduit.Auth.Domain.Services.DataAccess;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        TRepository? GetRepository<TRepository>()
-            where TRepository : IRepository;
-    }
+    TRepository? GetRepository<TRepository>() where TRepository : IRepository;
 }

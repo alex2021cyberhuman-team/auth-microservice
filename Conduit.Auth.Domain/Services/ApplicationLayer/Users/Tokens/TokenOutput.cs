@@ -1,16 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens
+namespace Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
+
+public class TokenOutput
 {
-    public class TokenOutput
+    public TokenOutput(
+        string accessToken)
     {
-        public TokenOutput(string accessToken)
-        {
-            AccessToken = accessToken;
-        }
-
-        [Required]
-        [DataType(DataType.Text)]
-        public string AccessToken { get; set; }
+        AccessToken = accessToken;
     }
+
+    [Required]
+    [DataType(DataType.Text)]
+    public string AccessToken { get; set; }
 }

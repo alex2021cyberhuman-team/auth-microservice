@@ -1,7 +1,6 @@
-﻿namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes
+namespace Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
+
+public interface ITypedOutcome
 {
-    public interface ITypedOutcome
-    {
-        OutcomeType Type { get; }
-    }
+    OutcomeType Type { get; }
 }
