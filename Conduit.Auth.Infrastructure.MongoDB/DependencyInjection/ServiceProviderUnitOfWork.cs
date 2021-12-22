@@ -13,7 +13,7 @@ public class ServiceProviderUnitOfWork : IUnitOfWork
     {
         _serviceProvider = serviceProvider;
     }
-    
+
     public TRepository? GetRepository<TRepository>()
         where TRepository : IRepository
     {

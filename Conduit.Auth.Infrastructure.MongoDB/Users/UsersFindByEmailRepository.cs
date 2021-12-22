@@ -24,7 +24,10 @@ public class UsersFindByEmailRepository : IUsersFindByEmailRepository
     {
         var users = _connectionProvider.GetUsersCollection();
         var asyncCursor = await users.FindAsync(x => x.Email == email,
-            cancellationToken: cancellationToken);
+            new FindOptions<UserDto>
+            {
+                Collation = new("en", strength: CollationStrength.Secondary)
+            }, cancellationToken);
 
         return await asyncCursor.ConvertToUserAsync(cancellationToken);
     }
