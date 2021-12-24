@@ -1,13 +1,12 @@
 using System;
-using Conduit.Auth.ApplicationLayer;
 using Conduit.Auth.ApplicationLayer.Users.GetCurrent;
 using Conduit.Auth.ApplicationLayer.Users.Register;
 using Conduit.Auth.Domain.Services;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
 using Conduit.Auth.Domain.Users.Passwords;
 using Conduit.Auth.Domain.Users.Services;
-using Conduit.Auth.Infrastructure.Dapper.DependencyInjection;
 using Conduit.Auth.Infrastructure.JwtTokens;
+using Conduit.Auth.Infrastructure.MongoDB.DependencyInjection;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
@@ -19,8 +18,8 @@ using Conduit.Shared.Tokens;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 
@@ -39,10 +38,10 @@ services.AddSwaggerGen(c =>
 });
 
 services.AddHealthChecks().Services
-    .AddDapper(configuration.GetSection("Dapper").Bind).AddJwtIssuerServices()
+    .AddMongoWithHealthChecks(configuration.GetSection("Mongo").Bind)
+    .AddJwtIssuerServices()
     .AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
-    .AddTransient(typeof(IPipelineBehavior<,>), typeof(PipelineLogger<,>))
     .AddTransient<IPasswordManager, PasswordManager>()
     .AddSingleton<IIdManager, IdManager>()
     .AddSingleton<IImageChecker, ImageChecker>().AddHttpContextAccessor()
@@ -84,7 +83,7 @@ app.UseEndpoints(x =>
 var initializationScope = app.Services.CreateScope();
 
 await initializationScope.WaitHealthyServicesAsync(TimeSpan.FromHours(1));
-await initializationScope.InitializeDatabaseAsync();
+await initializationScope.InitializeMongoDbAsync();
 await initializationScope.InitializeQueuesAsync();
 
 #endregion

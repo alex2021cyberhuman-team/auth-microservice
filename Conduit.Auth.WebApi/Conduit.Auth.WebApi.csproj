@@ -9,7 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Conduit.Auth.ApplicationLayer\Conduit.Auth.ApplicationLayer.csproj"/>
-    <ProjectReference Include="..\Conduit.Auth.Infrastructure.Dapper\Conduit.Auth.Infrastructure.Dapper.csproj"/>
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure.MongoDB\Conduit.Auth.Infrastructure.MongoDB.csproj"/>
     <ProjectReference Include="..\Conduit.Auth.Infrastructure.JwtTokens\Conduit.Auth.Infrastructure.JwtTokens.csproj"/>
     <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj"/>
   </ItemGroup>

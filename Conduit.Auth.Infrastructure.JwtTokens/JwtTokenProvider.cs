@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
@@ -27,8 +27,6 @@ public class JwtTokenProvider : ITokenProvider
         _options = options.Value;
     }
 
-    #region ITokenProvider Members
-
     public Task<TokenOutput> CreateTokenAsync(
         User user,
         CancellationToken cancellationToken = default)
@@ -39,8 +37,6 @@ public class JwtTokenProvider : ITokenProvider
         var accessTokenString = _handler.WriteToken(accessToken);
         return Task.FromResult(new TokenOutput(accessTokenString));
     }
-
-    #endregion
 
     private JwtSecurityToken GetAccessToken(
         User user,

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Security.Cryptography;
 using Conduit.Auth.Domain.Users;
 using Conduit.Auth.Domain.Users.Passwords;
@@ -117,8 +117,6 @@ public class PasswordManager : IPasswordManager
         buffer[offset + 3] = (byte)(value >> 0);
     }
 
-    #region IPasswordManager Members
-
     /// <summary>
     ///     Returns a hashed representation of the supplied
     ///     <paramref name="password" /> for the specified
@@ -157,6 +155,4 @@ public class PasswordManager : IPasswordManager
         return decodedHashedPassword.Length != 0 &&
                VerifyHashedPassword(decodedHashedPassword, plainPassword);
     }
-
-    #endregion
 }

@@ -17,7 +17,7 @@ namespace Conduit.Auth.WebApi.Controllers.Users;
 public class UserController : SharedController
 {
     public UserController(
-        IMediator mediator, 
+        IMediator mediator,
         ILoggerFactory loggerFactory) : base(mediator, loggerFactory)
     {
     }

@@ -1,4 +1,4 @@
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Users.Services;
@@ -14,9 +14,7 @@ public class ImageChecker : IImageChecker
     {
         _client = client;
     }
-
-    #region IImageChecker Members
-
+    
     async Task<bool> IImageChecker.CheckImageAsync(
         string url,
         CancellationToken cancellationToken)
@@ -31,6 +29,4 @@ public class ImageChecker : IImageChecker
 
         return response.Content.Headers.ContentLength <= 10_000_000;
     }
-
-    #endregion
 }
