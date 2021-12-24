@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Conduit.Auth.Domain.Users;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
 
@@ -21,24 +22,18 @@ public class UserDto
         Biography = user.Biography;
     }
 
-    [Key]
+    [BsonId]
     public Guid Id { get; init; }
 
-    [Required]
+    
     public string Username { get; init; } = string.Empty;
-
-    [Required]
-    [EmailAddress]
+    
     public string Email { get; init; } = string.Empty;
 
-    [Required]
-    [DataType(DataType.Password)]
     public string Password { get; init; } = string.Empty;
 
-    [DataType(DataType.ImageUrl)]
     public string? Image { get; init; }
-
-    [DataType(DataType.MultilineText)]
+    
     public string? Biography { get; init; }
 
     public static explicit operator User(

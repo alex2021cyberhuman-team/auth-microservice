@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Conduit.Auth.Infrastructure.MongoDB.Connection;
 using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
+using MongoDB.Bson.Serialization.Conventions;
 using MongoDB.Driver;
 
 namespace Conduit.Auth.Infrastructure.MongoDB.DependencyInjection;
@@ -18,7 +19,14 @@ public class MongoDbInitializer
 
     public async Task InitializeAsync()
     {
+        RegisterConvention();
         await CreateUserIndexesAsync();
+    }
+
+    private static void RegisterConvention()
+    {
+        var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
+        ConventionRegistry.Register("camelCase", conventionPack, t => true);
     }
 
     private async Task CreateUserIndexesAsync()
