@@ -14,7 +14,7 @@ public class ImageChecker : IImageChecker
     {
         _client = client;
     }
-    
+
     async Task<bool> IImageChecker.CheckImageAsync(
         string url,
         CancellationToken cancellationToken)

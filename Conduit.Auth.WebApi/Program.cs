@@ -18,8 +18,8 @@ using Conduit.Shared.Tokens;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 
@@ -39,8 +39,7 @@ services.AddSwaggerGen(c =>
 
 services.AddHealthChecks().Services
     .AddMongoWithHealthChecks(configuration.GetSection("Mongo").Bind)
-    .AddJwtIssuerServices()
-    .AddJwtServices(configuration.GetSection("Jwt").Bind)
+    .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
     .AddTransient<IPasswordManager, PasswordManager>()
     .AddSingleton<IIdManager, IdManager>()

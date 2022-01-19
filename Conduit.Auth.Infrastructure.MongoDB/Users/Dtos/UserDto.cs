@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
 using Conduit.Auth.Domain.Users;
 using MongoDB.Bson.Serialization.Attributes;
 
@@ -25,15 +24,15 @@ public class UserDto
     [BsonId]
     public Guid Id { get; init; }
 
-    
+
     public string Username { get; init; } = string.Empty;
-    
+
     public string Email { get; init; } = string.Empty;
 
     public string Password { get; init; } = string.Empty;
 
     public string? Image { get; init; }
-    
+
     public string? Biography { get; init; }
 
     public static explicit operator User(

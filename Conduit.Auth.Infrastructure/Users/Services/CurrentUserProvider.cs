@@ -23,7 +23,7 @@ public class CurrentUserProvider : ICurrentUserProvider
         _httpContextAccessor = httpContextAccessor;
         _unitOfWork = unitOfWork;
     }
-    
+
     public Task<Guid?> GetCurrentUserIdAsync(
         CancellationToken cancellationToken = default)
     {

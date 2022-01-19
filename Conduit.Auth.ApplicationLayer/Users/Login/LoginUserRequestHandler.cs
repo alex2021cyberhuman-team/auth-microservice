@@ -26,7 +26,7 @@ public class LoginUserRequestHandler : IRequestHandler<LoginUserRequest,
         _tokenProvider = tokenProvider;
         _passwordManager = passwordManager;
     }
-    
+
     public async Task<Outcome<UserResponse>> Handle(
         LoginUserRequest request,
         CancellationToken cancellationToken)

@@ -25,7 +25,8 @@ public class MongoDbInitializer
 
     private static void RegisterConvention()
     {
-        var conventionPack = new ConventionPack { new CamelCaseElementNameConvention() };
+        var conventionPack =
+            new ConventionPack { new CamelCaseElementNameConvention() };
         ConventionRegistry.Register("camelCase", conventionPack, t => true);
     }
 

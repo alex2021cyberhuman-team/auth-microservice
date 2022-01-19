@@ -21,6 +21,45 @@ public class PasswordManager : IPasswordManager
     private readonly RandomNumberGenerator _rng =
         RandomNumberGenerator.Create();
 
+    /// <summary>
+    ///     Returns a hashed representation of the supplied
+    ///     <paramref name="password" /> for the specified
+    ///     <paramref name="user" />.
+    /// </summary>
+    /// <param name="user">The user whose password is to be hashed.</param>
+    /// <param name="password">The password to hash.</param>
+    /// <returns>
+    ///     A hashed representation of the supplied <paramref name="password" /> for
+    ///     the specified
+    ///     <paramref name="user" />.
+    /// </returns>
+    public string HashPassword(
+        string password,
+        User user)
+    {
+        return Convert.ToBase64String(HashPassword(password));
+    }
+
+    /// <summary>
+    ///     Returns a <see cref="bool" /> indicating the result of a password hash
+    ///     comparison.
+    /// </summary>
+    /// <param name="user">The user whose password should be verified.</param>
+    /// <param name="plainPassword">The password supplied for comparison.</param>
+    /// <remarks>Implementations of this method should be time consistent.</remarks>
+    public bool VerifyPassword(
+        string plainPassword,
+        User user)
+    {
+        var hashedPassword = user.Password;
+
+        var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
+
+        // read the format marker from the hashed password
+        return decodedHashedPassword.Length != 0 &&
+               VerifyHashedPassword(decodedHashedPassword, plainPassword);
+    }
+
     private byte[] HashPassword(
         string password)
     {
@@ -115,44 +154,5 @@ public class PasswordManager : IPasswordManager
         buffer[offset + 1] = (byte)(value >> 16);
         buffer[offset + 2] = (byte)(value >> 8);
         buffer[offset + 3] = (byte)(value >> 0);
-    }
-
-    /// <summary>
-    ///     Returns a hashed representation of the supplied
-    ///     <paramref name="password" /> for the specified
-    ///     <paramref name="user" />.
-    /// </summary>
-    /// <param name="user">The user whose password is to be hashed.</param>
-    /// <param name="password">The password to hash.</param>
-    /// <returns>
-    ///     A hashed representation of the supplied <paramref name="password" /> for
-    ///     the specified
-    ///     <paramref name="user" />.
-    /// </returns>
-    public string HashPassword(
-        string password,
-        User user)
-    {
-        return Convert.ToBase64String(HashPassword(password));
-    }
-
-    /// <summary>
-    ///     Returns a <see cref="bool" /> indicating the result of a password hash
-    ///     comparison.
-    /// </summary>
-    /// <param name="user">The user whose password should be verified.</param>
-    /// <param name="plainPassword">The password supplied for comparison.</param>
-    /// <remarks>Implementations of this method should be time consistent.</remarks>
-    public bool VerifyPassword(
-        string plainPassword,
-        User user)
-    {
-        var hashedPassword = user.Password;
-
-        var decodedHashedPassword = Convert.FromBase64String(hashedPassword);
-
-        // read the format marker from the hashed password
-        return decodedHashedPassword.Length != 0 &&
-               VerifyHashedPassword(decodedHashedPassword, plainPassword);
     }
 }

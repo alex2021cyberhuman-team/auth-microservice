@@ -21,7 +21,7 @@ public class GetCurrentUserRequestHandler : IRequestHandler<
         _tokenProvider = tokenProvider;
         _currentUserProvider = currentUserProvider;
     }
-    
+
     public async Task<Outcome<UserResponse>> Handle(
         GetCurrentUserRequest request,
         CancellationToken cancellationToken)

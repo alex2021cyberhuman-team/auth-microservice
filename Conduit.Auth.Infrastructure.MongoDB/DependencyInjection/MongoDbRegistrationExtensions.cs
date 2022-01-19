@@ -22,10 +22,8 @@ public static class MongoDbRegistrationExtensions
             .AddSingleton<IUsersWriteRepository, UsersWriteRepository>()
             .AddSingleton<IConnectionProvider, ConnectionProvider>()
             .AddScoped<IUnitOfWork, ServiceProviderUnitOfWork>()
-            .AddTransient<MongoDbInitializer>()
-            .AddHealthChecks()
-            .AddMongoDb(GetConnectionString(configure))
-            .Services;
+            .AddTransient<MongoDbInitializer>().AddHealthChecks()
+            .AddMongoDb(GetConnectionString(configure)).Services;
     }
 
     private static string GetConnectionString(
