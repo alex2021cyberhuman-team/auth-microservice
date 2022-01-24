@@ -7,14 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="10.3.6" />
-    <PackageReference Include="MediatR" Version="10.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+    <PackageReference Include="FluentValidation" Version="10.3.6"/>
+    <PackageReference Include="MediatR" Version="10.0.1"/>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0"/>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj" />
-    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj"/>
+    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj"/>
   </ItemGroup>
 
 </Project>

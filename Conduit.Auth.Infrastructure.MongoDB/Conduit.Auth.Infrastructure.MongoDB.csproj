@@ -7,18 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj" />
-    <ProjectReference Include="..\Conduit.Auth.Infrastructure\Conduit.Auth.Infrastructure.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.Domain\Conduit.Auth.Domain.csproj"/>
+    <ProjectReference Include="..\Conduit.Auth.Infrastructure\Conduit.Auth.Infrastructure.csproj"/>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.14.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.MongoDb" Version="6.0.1"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0"/>
+    <PackageReference Include="Microsoft.Extensions.Options" Version="6.0.0"/>
+    <PackageReference Include="MongoDB.Driver" Version="2.14.1"/>
   </ItemGroup>
 
 </Project>

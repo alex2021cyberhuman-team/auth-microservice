@@ -91,7 +91,7 @@ public class RegisterUserRequestHandler : IRequestHandler<
         {
             Id = user.Id,
             Username = user.Username,
-            Email = user.Email, 
+            Email = user.Email,
             Image = user.Image,
             Biography = user.Biography
         };
