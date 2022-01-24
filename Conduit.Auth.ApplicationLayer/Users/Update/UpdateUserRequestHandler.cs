@@ -88,8 +88,14 @@ public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
     private async Task ProduceUpdateUserEventAsync(
         User user)
     {
-        var updateUserEventModel = new UpdateUserEventModel(user.Id,
-            user.Username, user.Email, user.Image, user.Biography);
+        var updateUserEventModel = new UpdateUserEventModel
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email, 
+            Image = user.Image,
+            Biography = user.Biography
+        };
 
         await _eventProducer.ProduceEventAsync(updateUserEventModel);
     }

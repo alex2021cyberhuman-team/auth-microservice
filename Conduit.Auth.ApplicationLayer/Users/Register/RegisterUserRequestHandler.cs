@@ -87,8 +87,14 @@ public class RegisterUserRequestHandler : IRequestHandler<
     private async Task ProduceRegisterUserEventAsync(
         User user)
     {
-        var registerUserEventModel = new RegisterUserEventModel(user.Id,
-            user.Username, user.Email, user.Image, user.Biography);
+        var registerUserEventModel = new RegisterUserEventModel
+        {
+            Id = user.Id,
+            Username = user.Username,
+            Email = user.Email, 
+            Image = user.Image,
+            Biography = user.Biography
+        };
 
         await _eventProducer.ProduceEventAsync(registerUserEventModel);
     }
