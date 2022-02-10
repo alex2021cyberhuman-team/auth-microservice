@@ -20,7 +20,7 @@ public static class Outcome
 
 public class Outcome<T>
 {
-    internal Outcome(
+    public Outcome(
         T? result,
         OutcomeType type)
     {
