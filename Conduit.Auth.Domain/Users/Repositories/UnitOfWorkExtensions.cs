@@ -7,13 +7,11 @@ namespace Conduit.Auth.Domain.Users.Repositories;
 
 public static class UnitOfWorkExtensions
 {
-    public static async Task<User> HashPasswordAndUpdateUserAsync(
+    public static async Task<User> UpdateUserAsync(
         this IUnitOfWork unitOfWork,
         User newUser,
-        IPasswordManager passwordManager,
         CancellationToken cancellationToken = default)
     {
-        newUser = newUser.WithHashedPassword(passwordManager);
         var repository =
             unitOfWork.GetRequiredRepository<IUsersWriteRepository>();
         var user = await repository.UpdateAsync(newUser, cancellationToken);

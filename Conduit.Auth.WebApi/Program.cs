@@ -61,9 +61,6 @@ if (environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
-    app.UseSwaggerUI(c =>
-        c.SwaggerEndpoint("/swagger/v1/swagger.json",
-            "Conduit.Auth.WebApi v1"));
     IdentityModelEventSource.ShowPII = true;
 }
 

@@ -76,12 +76,20 @@ public class UpdateUserRequestHandler : IRequestHandler<UpdateUserRequest,
         var newUser = source with
         {
             Email = model.Email ?? source.Email,
-            Password = model.Password ?? source.Password,
             Biography = model.Bio ?? source.Biography,
             Image = model.Image ?? source.Image
         };
-        var user = await _unitOfWork.HashPasswordAndUpdateUserAsync(newUser,
-            _passwordManager, cancellationToken);
+        var isPasswordUpdated =
+            string.IsNullOrWhiteSpace(model.Password) == false &&
+            model.Password != source.Password;
+        if (isPasswordUpdated)
+        {
+            newUser = newUser.WithHashedPassword(_passwordManager);
+        }
+
+        var user =
+            await _unitOfWork.UpdateUserAsync(newUser, cancellationToken);
+
         return user;
     }
 
