@@ -64,9 +64,10 @@ if (environment.IsDevelopment())
     IdentityModelEventSource.ShowPII = true;
 }
 
-app.UseW3CLogging();
-
 app.UseRouting();
+app.UseCors(options =>
+    options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+app.UseW3CLogging();
 app.UseAuthentication();
 app.UseAuthorization();
 
