@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
+using Conduit.Shared.Validation;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,19 +56,17 @@ public abstract class SharedController : ControllerBase
 
                 return Ok(response.Result);
             case OutcomeType.Rejected:
-                if (response is not FluentRejectedOutcome<TResult>
-                    rejectedOutcome)
-                {
-                    return BadRequest();
-                }
-
-                foreach (var error in rejectedOutcome.ValidationResult.Errors)
-                {
-                    ModelState.AddModelError(error.PropertyName,
-                        error.ErrorMessage);
-                }
-
-                return BadRequest(ModelState);
+                return
+                    response is not FluentRejectedOutcome<TResult>
+                        rejectedOutcome
+                        ? new StatusCodeResult(422)
+                        : new ObjectResult(new
+                        {
+                            errors = new ConduitCamelCaseSerializableError(
+                                rejectedOutcome.ValidationResult
+                                    .ToValidation()
+                                    .ToModelStateDictionary())
+                        }) { StatusCode = 422 };
             case OutcomeType.Failed:
                 return StatusCode(StatusCodes.Status500InternalServerError);
             case OutcomeType.Banned:

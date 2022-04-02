@@ -4,6 +4,7 @@ using Conduit.Auth.Domain.Services.DataAccess;
 using Conduit.Auth.Domain.Users.Repositories;
 using Conduit.Auth.Domain.Users.Services;
 using FluentValidation;
+using Microsoft.Extensions.Localization;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Update;
 
@@ -12,15 +13,17 @@ public class UpdateUserRequestValidator : AbstractValidator<UpdateUserRequest>
     public UpdateUserRequestValidator(
         IImageChecker imageChecker,
         IUnitOfWork unitOfWork,
-        ICurrentUserProvider currentUserProvider)
+        ICurrentUserProvider currentUserProvider,
+        IStringLocalizer stringLocalizer)
     {
         RuleFor(x => x.User)
-            .SetValidator(new UserUpdateModelValidator(imageChecker));
+            .SetValidator(
+                new UserUpdateModelValidator(imageChecker, stringLocalizer));
         RuleFor(x => x.User.Email).UniqueEmail(
             unitOfWork.GetRequiredRepository<IUsersFindByEmailRepository>(),
-            currentUserProvider);
+            stringLocalizer, currentUserProvider);
         RuleFor(x => x.User.Username).UniqueUsername(
             unitOfWork.GetRequiredRepository<IUsersFindByUsernameRepository>(),
-            currentUserProvider);
+            stringLocalizer, currentUserProvider);
     }
 }

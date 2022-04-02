@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Conduit.Auth.ApplicationLayer.Users.GetCurrent;
 using Conduit.Auth.ApplicationLayer.Users.Register;
 using Conduit.Auth.Domain.Services;
@@ -10,9 +12,11 @@ using Conduit.Auth.Infrastructure.MongoDB.DependencyInjection;
 using Conduit.Auth.Infrastructure.Services;
 using Conduit.Auth.Infrastructure.Users.Passwords;
 using Conduit.Auth.Infrastructure.Users.Services;
+using Conduit.Auth.WebApi;
 using Conduit.Shared.Events.Models.Users.Register;
 using Conduit.Shared.Events.Models.Users.Update;
 using Conduit.Shared.Events.Services.RabbitMQ;
+using Conduit.Shared.Localization;
 using Conduit.Shared.Startup;
 using Conduit.Shared.Tokens;
 using Conduit.Shared.Validation;
@@ -31,9 +35,8 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 var environment = builder.Environment;
 var configuration = builder.Configuration;
-
-services.AddControllers()
-    .RegisterValidateModelAttribute();
+var supportedCultures = new List<CultureInfo> { new("ru"), new("en") };
+services.AddControllers().Localize<SharedResource>(supportedCultures);
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new() { Title = "Conduit.Auth.WebApi", Version = "v1" });
@@ -43,6 +46,7 @@ services.AddHealthChecks().Services
     .AddMongoWithHealthChecks(configuration.GetSection("Mongo").Bind)
     .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
+    .DisableDefaultModelValidation()
     .AddTransient<IPasswordManager, PasswordManager>()
     .AddSingleton<IIdManager, IdManager>()
     .AddSingleton<IImageChecker, ImageChecker>().AddHttpContextAccessor()
@@ -70,6 +74,7 @@ app.UseRouting();
 app.UseCors(options =>
     options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseW3CLogging();
+app.UseRequestLocalization();
 app.UseAuthentication();
 app.UseAuthorization();
 

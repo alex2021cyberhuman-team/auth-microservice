@@ -10,4 +10,4 @@ FROM base AS final
 WORKDIR /app
 COPY ./app/publish .
 ENTRYPOINT ["dotnet", "Conduit.Auth.WebApi.dll"]
-HEALTHCHECK --retries=10 CMD curl --fail http://localhost/health || exit
+HEALTHCHECK --timeout=120s --retries=120 CMD curl --fail http://localhost/health || exit

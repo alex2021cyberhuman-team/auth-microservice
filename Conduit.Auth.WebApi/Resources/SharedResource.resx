@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UserUsername" xml:space="preserve">
+    <value>Username</value>
+  </data>
+  <data name="UserEmail" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="UserBio" xml:space="preserve">
+    <value>Bio</value>
+  </data>
+  <data name="UserImage" xml:space="preserve">
+    <value>Image</value>
+  </data>
+  <data name="UserPassword" xml:space="preserve">
+    <value>Password</value>
+  </data>
+  <data name="UsernameShouldMatch" xml:space="preserve">
+    <value>Accepted only arabian digits, spec-symbols '@._-', latin and cyrillic symbols</value>
+  </data>
+  <data name="PasswordShouldMatch" xml:space="preserve">
+    <value>Password require contains latin upper and lower symbols, spec-symbols '!@#$&amp;*._-' and digits</value>
+  </data>
+  <data name="UsernameShouldBeUnique" xml:space="preserve">
+    <value>This name is already used</value>
+  </data>
+  <data name="EmailShouldBeUnique" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="UserImageShouldExists" xml:space="preserve">
+    <value>Image should be accessible for downloading</value>
+  </data>
+</root>
