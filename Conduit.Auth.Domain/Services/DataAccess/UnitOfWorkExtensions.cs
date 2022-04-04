@@ -28,8 +28,7 @@ public static class UnitOfWorkExtensions
         this IUnitOfWork unitOfWork) where TRepository : IRepository
     {
         return unitOfWork.GetRepository<TRepository>() ??
-               throw new ArgumentNullException(
-                   $"Cannot access to {typeof(TRepository)} in {unitOfWork.GetType()}",
-                   nameof(TRepository));
+               throw new InvalidOperationException(
+                   $"Cannot access to {typeof(TRepository)} in {unitOfWork.GetType()}");
     }
 }
