@@ -77,7 +77,7 @@ public abstract class SharedController : ControllerBase
 
                 return Unauthorized();
             default:
-                throw new ArgumentOutOfRangeException();
+                throw new NotImplementedException(response.Type.ToString());
         }
     }
 

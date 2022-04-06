@@ -18,13 +18,8 @@ public class RegisterUserModelValidator : AbstractValidator<RegisterUserModel>
 
     public RegisterUserModelValidator(
         IImageChecker imageChecker,
-        IStringLocalizer stringLocalizer,
-        ILogger<RegisterUserModelValidator> logger,
-        IHttpContextAccessor accessor)
+        IStringLocalizer stringLocalizer)
     {
-        var cultureString =
-            $"Log culture {CultureInfo.CurrentCulture}, {CultureInfo.CurrentUICulture}, {Thread.CurrentThread.CurrentCulture}, {Thread.CurrentThread.CurrentUICulture}";
-        logger.LogInformation(cultureString);
         RuleFor(x => x.Username).ValidUsername(stringLocalizer).NotEmpty()
             .WithName(stringLocalizer.GetString(UserUsername));
         RuleFor(x => x.Email).NotEmpty()

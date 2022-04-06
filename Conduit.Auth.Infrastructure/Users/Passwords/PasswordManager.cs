@@ -16,7 +16,7 @@ public class PasswordManager : IPasswordManager
      * (All UInt32s are stored big-endian.)
      */
 
-    private const int _iterCount = 10000;
+    private const int IterationsCount = 10000;
 
     private readonly RandomNumberGenerator _rng =
         RandomNumberGenerator.Create();
@@ -64,7 +64,7 @@ public class PasswordManager : IPasswordManager
         string password)
     {
         return HashPassword(password, _rng, KeyDerivationPrf.HMACSHA256,
-            _iterCount, 256 / 8, 256 / 8);
+            IterationsCount, 256 / 8, 256 / 8);
     }
 
     private static byte[] HashPassword(
