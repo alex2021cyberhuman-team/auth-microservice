@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Conduit.Auth.Domain.Users;
 using MongoDB.Bson.Serialization.Attributes;
 

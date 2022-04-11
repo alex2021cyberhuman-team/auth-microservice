@@ -1,4 +1,4 @@
-﻿namespace Conduit.Auth.Infrastructure.MongoDB.Connection;
+namespace Conduit.Auth.Infrastructure.MongoDB.Connection;
 
 public class MongoDbConnectionOptions
 {

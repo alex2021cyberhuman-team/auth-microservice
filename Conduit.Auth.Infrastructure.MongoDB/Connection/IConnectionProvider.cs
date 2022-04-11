@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
+using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
 using MongoDB.Driver;
 
 namespace Conduit.Auth.Infrastructure.MongoDB.Connection;

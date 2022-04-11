@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Conduit.Auth.Domain.Services.DataAccess;
 using Conduit.Auth.Domain.Users.Repositories;
 using Conduit.Auth.Infrastructure.MongoDB.Connection;

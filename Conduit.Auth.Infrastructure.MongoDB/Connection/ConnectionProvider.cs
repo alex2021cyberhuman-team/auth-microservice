@@ -1,4 +1,4 @@
-﻿using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
+using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 

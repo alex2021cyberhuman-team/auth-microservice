@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Conduit.Auth.Infrastructure.MongoDB.Connection;
 using Conduit.Auth.Infrastructure.MongoDB.Users.Dtos;

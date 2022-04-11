@@ -66,7 +66,8 @@ public abstract class SharedController : ControllerBase
                                 rejectedOutcome.ValidationResult
                                     .ToValidation()
                                     .ToModelStateDictionary())
-                        }) { StatusCode = 422 };
+                        })
+                        { StatusCode = 422 };
             case OutcomeType.Failed:
                 return StatusCode(StatusCodes.Status500InternalServerError);
             case OutcomeType.Banned:
