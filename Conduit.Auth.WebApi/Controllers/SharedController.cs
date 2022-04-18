@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
-using Conduit.Shared.Validation;
+using Conduit.Shared.Validations;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

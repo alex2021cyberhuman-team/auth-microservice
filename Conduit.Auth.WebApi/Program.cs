@@ -19,7 +19,7 @@ using Conduit.Shared.Events.Services.RabbitMQ;
 using Conduit.Shared.Localization;
 using Conduit.Shared.Startup;
 using Conduit.Shared.Tokens;
-using Conduit.Shared.Validation;
+using Conduit.Shared.Validations;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
