@@ -1,6 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Conduit.Auth.Domain.Users.Services;
+using Conduit.Auth.DomainLayer.Users.Services;
 using FluentValidation;
 using FluentValidation.Validators;
 

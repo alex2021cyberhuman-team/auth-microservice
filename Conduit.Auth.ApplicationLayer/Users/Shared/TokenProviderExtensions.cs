@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
-using Conduit.Auth.Domain.Users;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Auth.DomainLayer.Users;
+using Conduit.Shared.Outcomes;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Shared;
 

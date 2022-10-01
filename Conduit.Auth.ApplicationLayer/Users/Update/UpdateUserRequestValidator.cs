@@ -1,8 +1,8 @@
 using Conduit.Auth.ApplicationLayer.Users.Shared;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
-using Conduit.Auth.Domain.Services.DataAccess;
-using Conduit.Auth.Domain.Users.Repositories;
-using Conduit.Auth.Domain.Users.Services;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users;
+using Conduit.Auth.DomainLayer.Services.DataAccess;
+using Conduit.Auth.DomainLayer.Users.Repositories;
+using Conduit.Auth.DomainLayer.Users.Services;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 

@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
-using Conduit.Auth.Domain.Users;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Auth.DomainLayer.Users;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Shared;
 

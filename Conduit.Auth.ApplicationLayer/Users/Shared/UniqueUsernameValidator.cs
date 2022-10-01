@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
-using Conduit.Auth.Domain.Users.Repositories;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users;
+using Conduit.Auth.DomainLayer.Users.Repositories;
 using FluentValidation;
 using FluentValidation.Validators;
 

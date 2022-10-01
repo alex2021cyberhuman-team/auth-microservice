@@ -1,5 +1,5 @@
 using Conduit.Auth.ApplicationLayer.Users.Shared;
-using Conduit.Auth.Domain.Users.Services;
+using Conduit.Auth.DomainLayer.Users.Services;
 using FluentValidation;
 using Microsoft.Extensions.Localization;
 

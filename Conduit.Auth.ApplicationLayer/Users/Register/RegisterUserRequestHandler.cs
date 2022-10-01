@@ -1,15 +1,15 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
-using Conduit.Auth.Domain.Services;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
-using Conduit.Auth.Domain.Services.DataAccess;
-using Conduit.Auth.Domain.Users;
-using Conduit.Auth.Domain.Users.Passwords;
-using Conduit.Auth.Domain.Users.Repositories;
+using Conduit.Auth.DomainLayer.Services;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Auth.DomainLayer.Services.DataAccess;
+using Conduit.Auth.DomainLayer.Users;
+using Conduit.Auth.DomainLayer.Users.Passwords;
+using Conduit.Auth.DomainLayer.Users.Repositories;
 using Conduit.Shared.Events.Models.Users.Register;
 using Conduit.Shared.Events.Services;
+using Conduit.Shared.Outcomes;
 using FluentValidation;
 using MediatR;
 

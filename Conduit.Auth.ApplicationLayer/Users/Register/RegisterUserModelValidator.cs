@@ -1,7 +1,7 @@
 using System.Globalization;
 using System.Threading;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
-using Conduit.Auth.Domain.Users.Services;
+using Conduit.Auth.DomainLayer.Users.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;

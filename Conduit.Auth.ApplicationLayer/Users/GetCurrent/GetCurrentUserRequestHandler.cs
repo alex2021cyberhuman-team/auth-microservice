@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.ApplicationLayer.Users.Shared;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Outcomes;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users.Tokens;
+using Conduit.Shared.Outcomes;
 using MediatR;
 
 namespace Conduit.Auth.ApplicationLayer.Users.GetCurrent;

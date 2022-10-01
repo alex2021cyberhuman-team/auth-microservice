@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Conduit.Auth.Domain.Services.ApplicationLayer.Users;
-using Conduit.Auth.Domain.Users;
+using Conduit.Auth.DomainLayer.Services.ApplicationLayer.Users;
+using Conduit.Auth.DomainLayer.Users;
 
 namespace Conduit.Auth.ApplicationLayer.Users.Shared;
 
