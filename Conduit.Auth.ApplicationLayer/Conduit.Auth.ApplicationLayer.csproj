@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Conduit.Auth.DomainLayer\Conduit.Auth.DomainLayer.csproj" />
+    <ProjectReference Include="..\shared-core\Conduit.Shared.Events\Conduit.Shared.Events.csproj" />
     <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj" />
   </ItemGroup>
 

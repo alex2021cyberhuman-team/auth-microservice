@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <EnablePreviewFeatures>True</EnablePreviewFeatures>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Conduit.Auth.ApplicationLayer\Conduit.Auth.ApplicationLayer.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.InfrastructureLayer.MongoDB\Conduit.Auth.InfrastructureLayer.MongoDB.csproj" />
+    <ProjectReference Include="..\Conduit.Auth.InfrastructureLayer.JwtTokens\Conduit.Auth.InfrastructureLayer.JwtTokens.csproj" />
+    <ProjectReference Include="..\shared-core\Conduit.Shared.AspNetCore\Conduit.Shared.AspNetCore.csproj" />
+    <ProjectReference Include="..\shared-core\Conduit.Shared\Conduit.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="6.0.1" />
+    <PackageReference Include="AspNetCore.HealthChecks.Rabbitmq" Version="6.0.1" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.3.6" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\SharedResource.ru.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SharedResources.ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SharedResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SharedResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

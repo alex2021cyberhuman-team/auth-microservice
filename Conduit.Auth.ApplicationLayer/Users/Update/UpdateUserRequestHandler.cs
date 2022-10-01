@@ -7,7 +7,7 @@ using Conduit.Auth.DomainLayer.Services.DataAccess;
 using Conduit.Auth.DomainLayer.Users;
 using Conduit.Auth.DomainLayer.Users.Passwords;
 using Conduit.Auth.DomainLayer.Users.Repositories;
-using Conduit.Shared.Events.Models.Users.Update;
+using Conduit.Shared.Events.Models.Users;
 using Conduit.Shared.Events.Services;
 using Conduit.Shared.Outcomes;
 using FluentValidation;

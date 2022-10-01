@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+  <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+    <xsd:element name="root" msdata:IsDataSet="true">
+
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="UserUsername" xml:space="preserve">
+    <value>Имя пользователя</value>
+  </data>
+  <data name="UserPassword" xml:space="preserve">
+    <value>Пароль</value>
+  </data>
+  <data name="UserEmail" xml:space="preserve">
+    <value>Электронная почта</value>
+  </data>
+  <data name="UserBio" xml:space="preserve">
+    <value>Биография</value>
+  </data>
+  <data name="UserImage" xml:space="preserve">
+    <value>Ссылка на аватар</value>
+  </data>
+  <data name="UsernameShouldMatch" xml:space="preserve">
+    <value>Принимаются только латинцкие и кирилические символы и арабские цифры и символы '@._-'</value>
+  </data>
+  <data name="PasswordShouldMatch" xml:space="preserve">
+    <value>Пароль должен содержать латинцкие симовлы в верхнем и нижнем регистре, спец-символы '!@#$&amp;*._-' и цифры</value>
+  </data>
+  <data name="UsernameShouldBeUnique" xml:space="preserve">
+    <value>Это имя пользователя уже занято</value>
+  </data>
+  <data name="EmailShouldBeUnique" xml:space="preserve">
+    <value>Эта электронная почта уже занята</value>
+  </data>
+  <data name="UserImageShouldExists" xml:space="preserve">
+    <value>Аватар должен быть доступен для загрузки</value>
+  </data>
+</root>
