@@ -9,6 +9,7 @@ using Conduit.Auth.DomainLayer.Users.Passwords;
 using Conduit.Auth.DomainLayer.Users.Services;
 using Conduit.Auth.InfrastructureLayer.JwtTokens;
 using Conduit.Auth.InfrastructureLayer.MongoDB.DependencyInjection;
+using Conduit.Auth.InfrastructureLayer.OAuth;
 using Conduit.Auth.InfrastructureLayer.Services;
 using Conduit.Auth.InfrastructureLayer.Users.Passwords;
 using Conduit.Auth.InfrastructureLayer.Users.Services;
@@ -43,6 +44,11 @@ services.AddSwaggerGen(c =>
 
 services.AddHealthChecks().Services
     .AddMongoWithHealthChecks(configuration.GetSection("Mongo").Bind)
+    .AddAuthentication()
+    .AddCookie(AuthConfig.DefaultCookieScheme, options =>
+    {
+        options.Cookie.Domain = 
+    }).Services
     .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()
     .DisableDefaultModelValidation()
