@@ -10,3 +10,4 @@ public interface IUsersFindByUsernameRepository : IRepository
         string username,
         CancellationToken cancellationToken = default);
 }
+

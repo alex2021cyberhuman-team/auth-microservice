@@ -47,7 +47,8 @@ services.AddHealthChecks().Services
     .AddAuthentication()
     .AddCookie(AuthConfig.DefaultCookieScheme, options =>
     {
-        options.Cookie.Domain = 
+        options.LoginPath = AuthConfig.LoginPath;
+        options.LogoutPath = AuthConfig.LogoutPath;
     }).Services
     .AddJwtIssuerServices().AddJwtServices(configuration.GetSection("Jwt").Bind)
     .AddW3CLogging(configuration.GetSection("W3C").Bind).AddHttpClient()

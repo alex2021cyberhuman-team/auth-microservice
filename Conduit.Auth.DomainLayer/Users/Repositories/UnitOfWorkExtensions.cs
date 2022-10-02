@@ -1,3 +1,5 @@
+using System;
+using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Conduit.Auth.DomainLayer.Services.DataAccess;
@@ -75,6 +77,19 @@ public static class UnitOfWorkExtensions
             .GetRequiredRepository<IUsersFindByUsernameRepository>();
         var user = await repository.FindByUsernameAsync(
             username, cancellationToken);
+        return user;
+    }
+
+    public static async Task<User?> FindUserByPrincipalAsync(this IUnitOfWork unitOfWork,
+        ClaimsPrincipal principal,
+        string claimType = ClaimTypes.NameIdentifier,
+        CancellationToken cancellationToken = default)
+    {
+        var id = Guid.Parse(principal.FindFirst(claimType)!.Value);
+        var repository = unitOfWork
+            .GetRequiredRepository<IUsersFindByIdRepository>();
+        var user = await repository.FindByIdAsync(
+            id, cancellationToken);
         return user;
     }
 }

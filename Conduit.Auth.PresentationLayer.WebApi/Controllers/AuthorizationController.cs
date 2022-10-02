@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using Conduit.Auth.DomainLayer.Users;
+using Conduit.Auth.DomainLayer.Services.DataAccess;
+using Conduit.Auth.DomainLayer.Users.Repositories;
+using Conduit.Auth.InfrastructureLayer.JwtTokens;
+using Conduit.Auth.InfrastructureLayer.OAuth;
 using Conduit.Shared.Collections;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -22,15 +24,18 @@ public class AuthorizationController : Controller
     private readonly IOpenIddictApplicationManager _applicationManager;
     private readonly IOpenIddictAuthorizationManager _authorizationManager;
     private readonly IOpenIddictScopeManager _scopeManager;
+    private readonly IUnitOfWork _unitOfWork;
 
     public AuthorizationController(
         IOpenIddictApplicationManager applicationManager,
         IOpenIddictAuthorizationManager authorizationManager,
-        IOpenIddictScopeManager scopeManager)
+        IOpenIddictScopeManager scopeManager,
+        IUnitOfWork unitOfWork)
     {
         _applicationManager = applicationManager;
         _authorizationManager = authorizationManager;
         _scopeManager = scopeManager;
+        _unitOfWork = unitOfWork;
     }
 
     [HttpGet("~/connect/authorize")]
@@ -47,7 +52,7 @@ public class AuthorizationController : Controller
         //  - If the user principal can't be extracted or the cookie is too old.
         //  - If prompt=login was specified by the client application.
         //  - If a max_age parameter was provided and the authentication cookie is not considered "fresh" enough.
-        var result = await HttpContext.AuthenticateAsync(IdentityConstants.ApplicationScheme);
+        var result = await HttpContext.AuthenticateAsync(AuthConfig.DefaultCookieScheme);
         if (!result.Succeeded || request.HasPrompt(OpenIddictConstants.Prompts.Login) ||
             (request.MaxAge != null && result.Properties?.IssuedUtc != null &&
                 DateTimeOffset.UtcNow - result.Properties.IssuedUtc > TimeSpan.FromSeconds(request.MaxAge.Value)))
@@ -78,12 +83,12 @@ public class AuthorizationController : Controller
             parameters.Add(KeyValuePair.Create(OpenIddictConstants.Parameters.Prompt, new StringValues(prompt)));
 
             return Challenge(
-                authenticationSchemes: IdentityConstants.ApplicationScheme,
+                authenticationSchemes: AuthConfig.DefaultCookieScheme,
                 properties: new() { RedirectUri = Request.PathBase + Request.Path + QueryString.Create(parameters) });
         }
 
         // Retrieve the profile of the logged in user.
-        var user = await _userManager.GetUserAsync(result.Principal) ??
+        var user = await _unitOfWork.FindUserByPrincipalAsync(result.Principal) ??
             throw new InvalidOperationException("The user details cannot be retrieved.");
 
         // Retrieve the application details from the database.
@@ -94,7 +99,7 @@ public class AuthorizationController : Controller
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await _authorizationManager.FindAsync(
-            subject: await _userManager.GetUserIdAsync(user),
+            subject: user.Id.ToString(),
             client: await _applicationManager.GetIdAsync(application) ??
             throw new InvalidOperationException("await _applicationManager.GetIdAsync(application) is null"),
             status: OpenIddictConstants.Statuses.Valid,
@@ -123,13 +128,7 @@ public class AuthorizationController : Controller
             case OpenIddictConstants.ConsentTypes.Explicit
                 when authorizations.Any() && !request.HasPrompt(OpenIddictConstants.Prompts.Consent):
                 // Create the claims-based identity that will be used by OpenIddict to generate tokens.
-                var claims = Enumerable.Empty<Claim>()
-                    .Append(new(OpenIddictConstants.Claims.Subject, await _userManager.GetUserIdAsync(user)))
-                    .Append(new(OpenIddictConstants.Claims.Email, await _userManager.GetEmailAsync(user)))
-                    .Append(new(OpenIddictConstants.Claims.Name, await _userManager.GetUserNameAsync(user)))
-                    .Concat(
-                        (await _userManager.GetRolesAsync(user))
-                        .Select(role => new Claim(OpenIddictConstants.Claims.Role, role)));
+                var claims = user.GetCommonClaims();
                 var identity = new ClaimsIdentity(claims, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
                 // Note: in this sample, the granted scopes match the requested scope
@@ -142,7 +141,7 @@ public class AuthorizationController : Controller
                 // for future authorization or token requests containing the same scopes.
                 var authorization = authorizations.LastOrDefault() ?? await _authorizationManager.CreateAsync(
                     principal: new ClaimsPrincipal(identity),
-                    subject: await _userManager.GetUserIdAsync(user),
+                    subject: user.Id.ToString(),
                     client: await _applicationManager.GetIdAsync(application) ??
                     throw new InvalidOperationException(
                         "await _applicationManager.GetIdAsync(application) is null"),
@@ -182,7 +181,7 @@ public class AuthorizationController : Controller
             throw new InvalidOperationException("The OpenID Connect request cannot be retrieved.");
 
         // Retrieve the profile of the logged in user.
-        var user = await _userManager.GetUserAsync(User) ??
+        var user = await _unitOfWork.FindUserByPrincipalAsync(User) ??
             throw new InvalidOperationException("The user details cannot be retrieved.");
 
         // Retrieve the application details from the database.
@@ -193,7 +192,7 @@ public class AuthorizationController : Controller
 
         // Retrieve the permanent authorizations associated with the user and the calling client application.
         var authorizations = await _authorizationManager.FindAsync(
-            subject: await _userManager.GetUserIdAsync(user),
+            subject: user.Id.ToString(),
             client: await _applicationManager.GetIdAsync(application) ??
             throw new NotImplementedException("await _applicationManager.GetIdAsync(application) is null"),
             status: OpenIddictConstants.Statuses.Valid,
@@ -217,11 +216,8 @@ public class AuthorizationController : Controller
         }
 
         // Create the claims-based identity that will be used by OpenIddict to generate tokens.
-        var identity = new ClaimsIdentity(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme)
-            .AddClaim(OpenIddictConstants.Claims.Subject, await _userManager.GetUserIdAsync(user))
-            .AddClaim(OpenIddictConstants.Claims.Email, await _userManager.GetEmailAsync(user))
-            .AddClaim(OpenIddictConstants.Claims.Name, await _userManager.GetUserNameAsync(user))
-            .AddClaims(OpenIddictConstants.Claims.Role, (await _userManager.GetRolesAsync(user)).ToImmutableArray());
+        var identity =
+            new ClaimsIdentity(user.GetCommonClaims(), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 
         // Note: in this sample, the granted scopes match the requested scope
         // but you may want to allow the user to uncheck specific scopes.
@@ -233,7 +229,7 @@ public class AuthorizationController : Controller
         // for future authorization or token requests containing the same scopes.
         var authorization = authorizations.LastOrDefault() ?? await _authorizationManager.CreateAsync(
             principal: new ClaimsPrincipal(identity),
-            subject: await _userManager.GetUserIdAsync(user),
+            subject: user.Id.ToString(),
             client: await _applicationManager.GetIdAsync(application) ??
             throw new InvalidOperationException("await _applicationManager.GetIdAsync(application) is null"),
             type: OpenIddictConstants.AuthorizationTypes.Permanent,
@@ -261,7 +257,7 @@ public class AuthorizationController : Controller
         // Ask ASP.NET Core Identity to delete the local and external cookies created
         // when the user agent is redirected from the external identity provider
         // after a successful authentication flow (e.g Google or Facebook).
-        await _signInManager.SignOutAsync();
+        await HttpContext.SignOutAsync(AuthConfig.DefaultCookieScheme);
 
         // Returning a SignOutResult will ask OpenIddict to redirect the user agent
         // to the post_logout_redirect_uri specified by the client application or to
@@ -285,7 +281,7 @@ public class AuthorizationController : Controller
                 .Principal ?? throw new InvalidOperationException("AuthenticateResult.Principal is null");
 
             // Retrieve the user profile corresponding to the authorization code/refresh token.
-            var user = await _userManager.FindByIdAsync(principal.GetClaim(OpenIddictConstants.Claims.Subject));
+            var user = await _unitOfWork.FindUserByPrincipalAsync(principal, OpenIddictConstants.Claims.Subject);
             if (user is null)
             {
                 return Forbid(
@@ -300,7 +296,7 @@ public class AuthorizationController : Controller
             }
 
             // Ensure the user is still allowed to sign in.
-            if (!await _signInManager.CanSignInAsync(user))
+            if (!user.IsAllowedToSignIn)
             {
                 return Forbid(
                     authenticationSchemes: OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,

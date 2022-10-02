@@ -44,4 +44,6 @@ public record User
 
     [DataType(DataType.MultilineText)]
     public string? Biography { get; init; }
+
+    public bool IsAllowedToSignIn { get; set; } = true;
 }
